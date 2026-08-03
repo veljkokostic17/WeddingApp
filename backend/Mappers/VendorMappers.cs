@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.Dtos.Vendor;
 using backend.Models;
 
@@ -20,7 +16,11 @@ namespace backend.Mappers
                 Phone = vendorModel.Phone,
                 Email = vendorModel.Email,
                 IsActive = vendorModel.IsActive,
-                CategoryName = vendorModel.Category.Name
+                CategoryName = vendorModel.Category.Name,
+                InstagramUrl = vendorModel.InstagramUrl,
+                Capacity = vendorModel.Capacity,
+                TableSize = vendorModel.TableSize,
+                CreatedAt = vendorModel.CreatedAt
             };
         }
     }

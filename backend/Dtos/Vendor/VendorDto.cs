@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace backend.Dtos.Vendor
 {
     public class VendorDto
@@ -13,7 +8,11 @@ namespace backend.Dtos.Vendor
         public string? Address { get; set; }
         public string Phone { get; set; } = string.Empty;
         public string? Email { get; set; }
-        public bool IsActive { get; set; }
+        public string? InstagramUrl {get ;set;}
         public string CategoryName { get; set; } = string.Empty;
+        public int? Capacity {get; set;}
+        public bool IsActive { get; set; }
+        public string? TableSize {get; set;}
+        public DateTime CreatedAt {get; set; } = DateTime.UtcNow;
     }
 }
