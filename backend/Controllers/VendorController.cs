@@ -46,10 +46,15 @@ namespace backend.Controllers
             var vendorModel = vendorDto.ToVendorFromCreateDTO();
             _context.Vendors.Add(vendorModel);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new {id = vendorModel.Id}, vendorModel.ToVendorDto());
+
+            var created = _context.Vendors
+                .Include(v => v.Category)
+                .FirstOrDefault(v => v.Id == vendorModel.Id);
+
+            return CreatedAtAction(nameof(GetById), new { id = vendorModel.Id }, created!.ToVendorDto());
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] UpdateVendorDto updateDto)
         {
             var vendorModel = _context.Vendors.FirstOrDefault(u => u.Id == id);
@@ -69,8 +74,30 @@ namespace backend.Controllers
             vendorModel.IsActive = updateDto.IsActive;   
             vendorModel.Capacity = updateDto.Capacity;
             vendorModel.TableSize = updateDto.TableSize;   
+            
+            _context.SaveChanges();
 
-            return Ok (vendorModel.ToVendorDto());
+             var created = _context.Vendors
+                .Include(v => v.Category)
+                .FirstOrDefault(v => v.Id == vendorModel.Id);
+
+            return Ok (created!.ToVendorDto());
+        }
+        [HttpDelete("{id}")]
+        public IActionResult Delete ([FromRoute] int id)
+        {
+            var vendorModel = _context.Vendors.FirstOrDefault(u => u.Id == id);
+
+            if (vendorModel == null)
+            {
+                return NotFound();
+            }
+
+            _context.Vendors.Remove(vendorModel);
+            _context.SaveChanges();
+
+            return NoContent();
+            
         }
     }
 }
