@@ -50,7 +50,7 @@ namespace backend.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] int id, [FromBody] UpdateVendorDto updateDto)
+        public IActionResult Update([FromRoute] int id, [FromBody] UpdateVendorDto updateDto)
         {
             var vendorModel = _context.Vendors.FirstOrDefault(u => u.Id == id);
 
