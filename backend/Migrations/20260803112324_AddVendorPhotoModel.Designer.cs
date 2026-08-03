@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260803112324_AddVendorPhotoModel")]
+    partial class AddVendorPhotoModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,27 +118,6 @@ namespace backend.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("backend.Models.VendorUnavailableDate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<int>("VendorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VendorId");
-
-                    b.ToTable("VendorUnavailableDates");
-                });
-
             modelBuilder.Entity("backend.Models.Vendor", b =>
                 {
                     b.HasOne("backend.Models.Category", "Category")
@@ -148,17 +130,6 @@ namespace backend.Migrations
                 });
 
             modelBuilder.Entity("backend.Models.VendorPhoto", b =>
-                {
-                    b.HasOne("backend.Models.Vendor", "Vendor")
-                        .WithMany()
-                        .HasForeignKey("VendorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Vendor");
-                });
-
-            modelBuilder.Entity("backend.Models.VendorUnavailableDate", b =>
                 {
                     b.HasOne("backend.Models.Vendor", "Vendor")
                         .WithMany()

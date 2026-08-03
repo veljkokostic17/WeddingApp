@@ -23,5 +23,21 @@ namespace backend.Mappers
                 CreatedAt = vendorModel.CreatedAt
             };
         }
+        public static Vendor ToVendorFromCreateDTO (this CreateVendorDto vendorDto)
+        {
+            return new Vendor
+            {
+              Name = vendorDto.Name,
+              Description = vendorDto.Description,
+              Address = vendorDto.Address,
+              Phone = vendorDto.Phone,
+              Email= vendorDto.Email,
+              InstagramUrl = vendorDto.InstagramUrl,
+              CategoryId = vendorDto.CategoryId,
+              IsActive = vendorDto.IsActive,
+              Capacity = vendorDto.Capacity,
+              TableSize = vendorDto.TableSize
+            };
+        }
     }
 }

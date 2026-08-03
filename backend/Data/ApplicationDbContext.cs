@@ -16,5 +16,7 @@ namespace backend.Data
         }
         public DbSet<Vendor> Vendors {get; set;}
         public DbSet<Category> Categories {get; set;}
+        public DbSet<VendorPhoto> Photos {get; set;}
+        public DbSet<VendorUnavailableDate> VendorUnavailableDates {get; set;}
     }
 }

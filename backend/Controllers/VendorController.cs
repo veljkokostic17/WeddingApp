@@ -1,7 +1,10 @@
 using backend.Data;
+using backend.Dtos.Vendor;
 using backend.Mappers;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Extensions.Msal;
 
 namespace backend.Controllers
 {
@@ -36,6 +39,38 @@ namespace backend.Controllers
             {
                 return Ok(vendor.ToVendorDto());
             }
+        }
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateVendorDto vendorDto)
+        {
+            var vendorModel = vendorDto.ToVendorFromCreateDTO();
+            _context.Vendors.Add(vendorModel);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new {id = vendorModel.Id}, vendorModel.ToVendorDto());
+        }
+
+        [HttpPut]
+        public IActionResult Update([FromBody] int id, [FromBody] UpdateVendorDto updateDto)
+        {
+            var vendorModel = _context.Vendors.FirstOrDefault(u => u.Id == id);
+
+            if (vendorModel == null)
+            {
+                return NotFound();
+            }
+            
+            vendorModel.Name = updateDto.Name;
+            vendorModel.Description = updateDto.Description;
+            vendorModel.Address = updateDto.Address;
+            vendorModel.Phone = updateDto.Phone;      
+            vendorModel.Email = updateDto.Email;
+            vendorModel.InstagramUrl = updateDto.InstagramUrl;   
+            vendorModel.CategoryId = updateDto.CategoryId;
+            vendorModel.IsActive = updateDto.IsActive;   
+            vendorModel.Capacity = updateDto.Capacity;
+            vendorModel.TableSize = updateDto.TableSize;   
+
+            return Ok (vendorModel.ToVendorDto());
         }
     }
 }
