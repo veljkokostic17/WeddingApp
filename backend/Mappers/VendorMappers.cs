@@ -21,7 +21,8 @@ namespace backend.Mappers
                 Capacity = vendorModel.Capacity,
                 TableSize = vendorModel.TableSize,
                 CreatedAt = vendorModel.CreatedAt,
-                Photos = vendorModel.Photos.Select(p => p.ToVendorPhotoDto()).ToList()
+                Photos = vendorModel.Photos.Select(p => p.ToVendorPhotoDto()).ToList(),
+                UnavailableDates = vendorModel.UnavailableDates.Select(p => p.ToVendorUnavailableDateDto()).ToList()
             };
         }
         public static Vendor ToVendorFromCreateDTO (this CreateVendorDto vendorDto)
@@ -59,5 +60,23 @@ namespace backend.Mappers
                 VendorId = vendorId
             };
         }
+        public static VendorUnavailableDateDto ToVendorUnavailableDateDto (this VendorUnavailableDate dateModel)
+        {
+            return new VendorUnavailableDateDto
+            {
+                Id = dateModel.Id,
+                Date = dateModel.Date
+            };
+        }
+
+        public static VendorUnavailableDate ToVendorUnavailableDateFromCreateDto (this CreateVendorUnavailableDateDto dateDto, int vendorId)
+        {
+            return new VendorUnavailableDate
+            {
+                Date = dateDto.Date,
+                VendorId = vendorId
+            };
+        }
+
     }
 }

@@ -17,5 +17,6 @@ namespace backend.Dtos.Vendor
         public string? TableSize {get; set;}
         public DateTime CreatedAt {get; set; } = DateTime.UtcNow;
         public List<VendorPhotoDto> Photos {get; set;} = new ();
+        public List<VendorUnavailableDateDto> UnavailableDates {get; set;} = new();
     }
 }

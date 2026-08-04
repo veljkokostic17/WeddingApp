@@ -22,14 +22,14 @@ namespace backend.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var vendors = _context.Vendors.Include(v => v.Category).Include(v => v.Photos).ToList().Select(v => v.ToVendorDto());
+            var vendors = _context.Vendors.Include(v => v.Category).Include(v => v.Photos).Include(v => v.UnavailableDates).ToList().Select(v => v.ToVendorDto());
 
             return Ok(vendors);
         }
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute] int id)
         {
-            var vendor = _context.Vendors.Include(v => v.Category).Include(v => v.Photos).FirstOrDefault(v => v.Id == id);
+            var vendor = _context.Vendors.Include(v => v.Category).Include(v => v.Photos).Include(v => v.UnavailableDates).FirstOrDefault(v => v.Id == id);
 
             if (vendor == null)
             {
@@ -48,7 +48,7 @@ namespace backend.Controllers
             _context.SaveChanges();
 
             var created = _context.Vendors
-                .Include(v => v.Category).Include(v => v.Photos)
+                .Include(v => v.Category).Include(v => v.Photos).Include(v => v.UnavailableDates)
                 .FirstOrDefault(v => v.Id == vendorModel.Id);
 
             return CreatedAtAction(nameof(GetById), new { id = vendorModel.Id }, created!.ToVendorDto());
@@ -78,7 +78,7 @@ namespace backend.Controllers
             _context.SaveChanges();
 
              var created = _context.Vendors
-                .Include(v => v.Category).Include(v => v.Photos)
+                .Include(v => v.Category).Include(v => v.Photos).Include(v => v.UnavailableDates)
                 .FirstOrDefault(v => v.Id == vendorModel.Id);
 
             return Ok (created!.ToVendorDto());
@@ -100,10 +100,10 @@ namespace backend.Controllers
             
         }
 
-        //PHOTO REGULATING 
+        //PHOTO REGULATION 
         [HttpPost("{vendorId}/photos")]
 
-        public IActionResult CreatePhoto ([FromRoute] int vendorId, [FromBody] CreateVendorPhotoDto photoDto)
+        public IActionResult AddPhoto ([FromRoute] int vendorId, [FromBody] CreateVendorPhotoDto photoDto)
         {
             var photoModel = photoDto.ToVendorPhotoFromCreateDto(vendorId);
             _context.Photos.Add(photoModel);
@@ -126,8 +126,32 @@ namespace backend.Controllers
             _context.SaveChanges();
 
             return NoContent();
+        }
+        // UNAVAILABLE DATES REGULATION\
+        [HttpPost("{vendorId}/dates")]
+        public IActionResult AddUnavailableDate ([FromRoute] int vendorId, [FromBody] CreateVendorUnavailableDateDto dateDto)
+        {
+            var dateModel = dateDto.ToVendorUnavailableDateFromCreateDto(vendorId);
+            _context.VendorUnavailableDates.Add(dateModel);
+            _context.SaveChanges();
 
+            return CreatedAtAction (nameof(GetById), new {id = vendorId}, dateModel.ToVendorUnavailableDateDto());
+        }
 
+        [HttpDelete("{vendorId}/dates/{dateId}")]
+        public IActionResult DeleteUnavailableDate ([FromRoute] int dateId)
+        {
+            var dateModel = _context.VendorUnavailableDates.FirstOrDefault(v => v.Id == dateId);
+
+            if (dateModel == null)
+            {
+                return NotFound();
+            }
+
+            _context.VendorUnavailableDates.Remove(dateModel);
+            _context.SaveChanges();
+
+            return NoContent();
         }
     } 
 }

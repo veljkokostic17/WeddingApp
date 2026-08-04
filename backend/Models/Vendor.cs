@@ -21,6 +21,7 @@ namespace backend.Models
         public string? TableSize {get; set;}
         public DateTime CreatedAt {get; set; } = DateTime.UtcNow;
         public List<VendorPhoto> Photos {get; set;} = new();
+        public List<VendorUnavailableDate> UnavailableDates {get; set;} = new();
         
 
     }
