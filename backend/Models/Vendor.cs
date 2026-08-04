@@ -20,6 +20,7 @@ namespace backend.Models
         public int? Capacity {get; set;}
         public string? TableSize {get; set;}
         public DateTime CreatedAt {get; set; } = DateTime.UtcNow;
+        public List<VendorPhoto> Photos {get; set;} = new();
         
 
     }
