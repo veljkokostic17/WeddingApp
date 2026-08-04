@@ -22,14 +22,14 @@ namespace backend.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var vendors = _context.Vendors.Include(v => v.Category).ToList().Select(v => v.ToVendorDto());
+            var vendors = _context.Vendors.Include(v => v.Category).Include(v => v.Photos).ToList().Select(v => v.ToVendorDto());
 
             return Ok(vendors);
         }
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute] int id)
         {
-            var vendor = _context.Vendors.Include(v => v.Category).FirstOrDefault(v => v.Id == id);
+            var vendor = _context.Vendors.Include(v => v.Category).Include(v => v.Photos).FirstOrDefault(v => v.Id == id);
 
             if (vendor == null)
             {
@@ -48,7 +48,7 @@ namespace backend.Controllers
             _context.SaveChanges();
 
             var created = _context.Vendors
-                .Include(v => v.Category)
+                .Include(v => v.Category).Include(v => v.Photos)
                 .FirstOrDefault(v => v.Id == vendorModel.Id);
 
             return CreatedAtAction(nameof(GetById), new { id = vendorModel.Id }, created!.ToVendorDto());
@@ -78,7 +78,7 @@ namespace backend.Controllers
             _context.SaveChanges();
 
              var created = _context.Vendors
-                .Include(v => v.Category)
+                .Include(v => v.Category).Include(v => v.Photos)
                 .FirstOrDefault(v => v.Id == vendorModel.Id);
 
             return Ok (created!.ToVendorDto());
@@ -99,5 +99,35 @@ namespace backend.Controllers
             return NoContent();
             
         }
-    }
+
+        //PHOTO REGULATING 
+        [HttpPost("{vendorId}/photos")]
+
+        public IActionResult CreatePhoto ([FromRoute] int vendorId, [FromBody] CreateVendorPhotoDto photoDto)
+        {
+            var photoModel = photoDto.ToVendorPhotoFromCreateDto(vendorId);
+            _context.Photos.Add(photoModel);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(GetById), new {id = vendorId}, photoModel.ToVendorPhotoDto());
+        }
+
+        [HttpDelete("{vendorId}/photos/{photoId}")]
+        public IActionResult DeletePhoto ([FromRoute] int photoId)
+        {
+            var photoModel = _context.Photos.FirstOrDefault(p => p.Id == photoId);
+
+            if (photoModel == null)
+            {
+                return NotFound();
+            }
+            
+            _context.Photos.Remove(photoModel);
+            _context.SaveChanges();
+
+            return NoContent();
+
+
+        }
+    } 
 }

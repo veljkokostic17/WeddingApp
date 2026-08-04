@@ -35,10 +35,29 @@ Each is built and run independently.
 
 EF Core is code-first: entities live in `Models/`, changes flow into `Migrations/` via `dotnet ef migrations add`. `Data/ApplicationDbContext.cs` is the single `DbContext`, currently exposing `Vendors`, `Categories`, `Photos`, `VendorUnavailableDates`. Connection string in `appsettings.json` points at a local `SQLEXPRESS` instance with `Trusted_Connection` + `TrustServerCertificate` — dev-only, no secrets there.
 
-Only `Vendor` (+ `Category`) is implemented so far, with full CRUD in `VendorController`. `User`, `Favorite`, JWT auth, and the mobile-facing screens described in `PROJECT_BRIEF.md` are not yet built.
+`Vendor` and `Category` have full CRUD (`VendorController`, `CategoryController`). `User`, `Favorite`, JWT auth, and the mobile-facing screens described in `PROJECT_BRIEF.md` are not yet built.
+
+**Child-entity pattern (`VendorPhoto`, `VendorUnavailableDate`)**: these only ever make sense in the context of one `Vendor` (a `VendorPhoto` has zero meaning without its `VendorId`), so they don't get their own top-level controller or full CRUD. Instead: no standalone `GetAll`/`GetById` (they're read as part of `VendorDto`, not fetched independently) and no `Update` (editing doesn't make sense for either — delete + recreate instead). Just `Create`/`Delete`, nested as extra actions on `VendorController` under routes like `POST/DELETE api/vendor/{vendorId}/photos[/{photoId}]`.
+
+**Watch for EF Core reference cycles when embedding a child entity in a parent DTO.** `Vendor` has `List<VendorPhoto> Photos`, and `VendorPhoto` has a `Vendor Vendor` back-reference. When a query does `.Include(v => v.Photos)`, EF's relationship fixup sets both directions, so the raw object graph is a cycle (`Vendor → Photos → VendorPhoto → Vendor → ...`). Confirmed this actually throws `System.Text.Json.JsonException: A possible object cycle was detected` at runtime (not a compile error) the first time a vendor had ≥1 photo. Fix is to never put the raw EF model in a DTO — `VendorDto.Photos` is `List<VendorPhotoDto>` (a plain DTO with no back-reference), mapped via `VendorMappers.ToVendorPhotoDto()`. Apply the same fix when adding `VendorUnavailableDate` to `VendorDto`.
 
 **Mobile** is still the stock `create-expo-app` template (`expo-router` file-based routing under `app/`, template components under `components/`, `hooks/`, `constants/theme.ts`). No wedding-app-specific screens exist yet. `mobile/AGENTS.md` (imported by `mobile/CLAUDE.md`) flags that Expo has changed enough that versioned docs at `docs.expo.dev/versions/v54.0.0/` should be checked before writing Expo code — keep that reference intact rather than replacing it.
+
+## Where we left off (backend build order)
+
+Working controller-by-controller through the API before touching the mobile app is a deliberate choice, not just habit: `Vendor`/`Category`/`Photo`/`UnavailableDate` are all public, admin-managed, read-mostly data that needs no `[Authorize]` at all, so auth can slot in once, right before `Favorite` (the only user-owned resource), instead of being retrofitted onto every controller.
+
+Order, and current status:
+1. ✅ `Category` — full CRUD
+2. ✅ `Vendor` — full CRUD
+3. ✅ `VendorPhoto` — `Create`/`Delete` nested on `VendorController`, embedded read via `VendorDto.Photos`
+4. ⬜ `VendorUnavailableDate` — same pattern as `VendorPhoto` above, not started. `Vendor.cs` doesn't yet have the reverse `List<VendorUnavailableDate>` nav property either.
+5. ⬜ `User` model + JWT auth — modeled on the developer's prior "FinShark" project
+6. ⬜ `Favorite` — needs both `User` and `Vendor` to exist
+7. ⬜ Mobile screens (`PROJECT_BRIEF.md` MVP scope) — starts only after the above
 
 ## Working style
 
 Per `PROJECT_BRIEF.md`: this is a learning project for a 2nd-year student who is comfortable with C#/EF/ASP.NET/React but new to React Native/Expo. Prefer small incremental steps with explanations over large generated features, especially for anything React Native/mobile-specific. If a request would reintroduce something explicitly listed as out-of-scope in `PROJECT_BRIEF.md` (booking, payments, in-app messaging, admin panel, vendor self-service, reviews), flag it rather than building it.
+
+Default to explaining what to write and letting the developer type it themselves, checking/reviewing after (mirrors how `Category` and `VendorPhoto` CRUD got built) — write code directly only when they explicitly ask for it (e.g. "write it for me," "I'm confused, just do it"). When something might have a subtle runtime bug (not just a compile error) — e.g. the EF cycle above — actually run the app and hit the endpoint rather than reasoning about it in the abstract.

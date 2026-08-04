@@ -1,3 +1,5 @@
+using backend.Models;
+
 namespace backend.Dtos.Vendor
 {
     public class VendorDto
@@ -14,5 +16,6 @@ namespace backend.Dtos.Vendor
         public bool IsActive { get; set; }
         public string? TableSize {get; set;}
         public DateTime CreatedAt {get; set; } = DateTime.UtcNow;
+        public List<VendorPhotoDto> Photos {get; set;} = new ();
     }
 }
