@@ -28,7 +28,7 @@ namespace backend.Services
                 new Claim(ClaimTypes.Email, appUser.Email)
             };
 
-            var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+            var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

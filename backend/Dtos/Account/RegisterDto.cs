@@ -18,6 +18,6 @@ namespace backend.Dtos.Account
         [Required]    
         public string? YourPartnerName { get; set; } 
         [Required]
-        public DateOnly WeddingDate {get; set;}
+        public DateOnly WeddingDate {get; set;} 
     }
 }
