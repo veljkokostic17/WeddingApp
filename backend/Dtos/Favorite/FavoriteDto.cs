@@ -10,5 +10,7 @@ namespace backend.Dtos.Favorite
         public int Id {get; set;}
         public int VendorId { get; set; }
         public string VendorName { get; set; } = string.Empty;
+        public int CategoryId { get; set; }
+        public bool IsChosen {get; set;} 
     }
 }

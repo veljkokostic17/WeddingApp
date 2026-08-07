@@ -15,7 +15,9 @@ namespace backend.Mappers
             {
                 Id = favorite.Id,
                 VendorId = favorite.VendorId,
-                VendorName = favorite.Vendor.Name
+                VendorName = favorite.Vendor.Name,
+                CategoryId = favorite.Vendor.CategoryId,
+                IsChosen = favorite.IsChosen
             };
         }
     }

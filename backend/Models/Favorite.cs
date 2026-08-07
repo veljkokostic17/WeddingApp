@@ -12,5 +12,6 @@ namespace backend.Models
         public AppUser User { get; set; } = null!;
         public int VendorId {get; set;}
         public Vendor Vendor { get; set; } = null!;
+        public bool IsChosen { get; set; }
     }
 }

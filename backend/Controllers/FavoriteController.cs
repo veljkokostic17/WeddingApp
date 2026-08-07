@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using backend.Data;
@@ -8,9 +9,11 @@ using backend.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace backend.Controllers
 {
@@ -32,15 +35,15 @@ namespace backend.Controllers
 
             var favorties = _context.Favorites
                 .Include(f => f.Vendor)
-                .Where (f => f.UserId == userId)
+                .Where(f => f.UserId == userId)
                 .ToList()
-                .Select (f => f.ToFavoriteDto());
+                .Select(f => f.ToFavoriteDto());
 
-            return Ok (favorties);
+            return Ok(favorties);
         }
 
         [HttpPost("{vendorId}")]
-        public IActionResult Add ([FromRoute] int vendorId)
+        public IActionResult Add([FromRoute] int vendorId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -66,7 +69,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{vendorId}")]
-        public IActionResult Remove ([FromRoute] int vendorId)
+        public IActionResult Remove([FromRoute] int vendorId)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -81,6 +84,51 @@ namespace backend.Controllers
             _context.SaveChanges();
 
             return NoContent();
+        }
+
+        [HttpPut("{vendorId}/choose")]
+        public IActionResult ChosenWeddingVendorSelect([FromRoute] int vendorId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var target = _context.Favorites
+                .Include(f => f.Vendor)
+                .FirstOrDefault(f => f.UserId == userId && f.VendorId == vendorId);
+
+            var vendorExists = _context.Vendors.Any(v => v.Id == vendorId);
+            if (!vendorExists)
+            {
+                return NotFound("Vendor does not exist."); 
+            }
+
+            if (target == null)
+            {
+                var newFavorite = new Favorite { UserId = userId!, VendorId = vendorId };
+                _context.Favorites.Add(newFavorite);
+                _context.SaveChanges();
+
+                target = _context.Favorites
+                        .Include(f => f.Vendor).
+                        FirstOrDefault(f => f.UserId == userId && f.VendorId == vendorId);
+            }
+
+            var siblings = _context.Favorites
+                .Include(f => f.Vendor)
+                .Where(f => f.UserId == userId
+                            && f.Vendor.CategoryId == target!.Vendor.CategoryId
+                            && f.VendorId != vendorId)
+                .ToList();
+
+            foreach (var fav in siblings)
+            {
+                fav.IsChosen = false;
+            }
+
+            target!.IsChosen = true;
+
+            _context.SaveChanges();
+
+            return Ok (target.ToFavoriteDto());
         }
     }
 }
