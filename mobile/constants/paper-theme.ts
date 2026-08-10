@@ -2,10 +2,13 @@ import { MD3LightTheme, configureFonts } from "react-native-paper";
 
 export const Palette = {
   cream: "#FBF6EC",
+  creamDeep: "#F3EAD9",
   charcoal: "#362F27",
+  charcoalSoft: "#6B5F53",
   gold: "#B8935A",
   deepGold: "#8C6A3B",
   blush: "#E3B8B0",
+  line: "#E8DFCF",
 };
 
 const baseFonts = configureFonts({

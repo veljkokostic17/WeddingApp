@@ -1,0 +1,724 @@
+<!doctype html><html><head><!-- frame-runtime --><script>window.__FRAME_PREAMBLE={"capabilities":{"assets":"assets.hcOK0ALv.js","comments":"comments.BKZ3qutA.js","db":"db.CeV_J5G-.js","downloads":"downloads.BXsoAvg9.js","mcp":"mcp.CYSdpjo0.js","permissions":"permissions.DdITF2Mk.js","sample":"sample.DpdXn9di.js","self":"self.BN4be5De.js","user":"user.Cr_h1ETf.js"},"transforms":"_transforms.VaITkagF.js","comments":"_comments.CNSvmFji.js","translate":"_translate.BOzFH2D9.js"}</script><script>(function(){"use strict";var ne=["light","dark","system"];function oe(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function W(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function se(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const n=t.theme;return typeof n=="string"&&ne.includes(n)}function ie(e){try{typeof reportError=="function"?reportError(e):setTimeout(()=>{throw e},0)}catch{}}var Y=Object.freeze(Object.assign(Object.create(null),{user:Object.freeze(Object.assign(Object.create(null),{id:null,isOwner:!1,canEdit:!1,name:null,avatarUrl:null,email:null}))})),ae={sample:"sample"};function x(){const e=new Uint8Array(20);try{crypto.getRandomValues(e)}catch{for(let n=0;n<e.length;n++)e[n]=Math.floor(Math.random()*256)}let t="";for(const n of e)t+=(n%36).toString(36);return t}function ce(e,t){const n=r=>{const o={path:r},i=r.split("/");return{id:i[i.length-1],path:r,get:()=>t("get",[o]),set:g=>t("set",[o,g]),update:g=>t("update",[o,g]),delete:()=>t("delete",[o]),acquire:g=>t("acquire",[o,g]),onSnapshot:(g,y)=>t("subscribe",[o,g,y]),collection:g=>a(r+"/"+String(g))}},u=r=>({where:(o,i,g)=>u({...r,where:[...r.where??[],{f:String(o),op:String(i),v:g}]}),orderBy:(o,i)=>u({...r,orderBy:{f:String(o),dir:i===void 0?"asc":String(i)}}),limit:o=>u({...r,limit:Number(o)}),get:()=>t("query",[r]),onSnapshot:(o,i)=>t("subscribe",[r,o,i])}),a=r=>({...u({collection:r}),path:r,doc:o=>n(r+"/"+(o===void 0?x():String(o))),add:o=>{const i=n(r+"/"+x());return Promise.resolve(i.set(o)).then(()=>i)}});e.doc=r=>n(String(r)),e.collection=r=>a(String(r))}function J(e){if(window===top||e.type==="auxclick"&&e.button!==1)return;const t=e.composedPath?e.composedPath():[e.target];let n=null;for(let o=0;o<t.length;o++){const i=t[o];if(i&&i.matches&&i.matches("a[href],area[href]")){n=i;break}}if(!n&&e.target&&e.target.closest&&(n=e.target.closest("a[href],area[href]")),!n)return;const u=n.getAttribute("href");if(!u)return;let a,r;try{a=new URL(u,document.baseURI),r=new URL(document.baseURI).origin}catch{return}if((a.protocol==="http:"||a.protocol==="https:")&&a.origin!==r){e.preventDefault();const o=(n.getAttribute("target")??document.querySelector("base[target]")?.getAttribute("target")??"").toLowerCase(),i=e.type==="auxclick"||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||!["","_self","_top","_parent"].includes(o);parent.postMessage({__frame_nav:!0,url:a.href,newTab:i},"*")}}var G={};function I(e){if(window===top)return;const t=Date.now();t-(G[e]||0)<500||(G[e]=t,parent.postMessage({__frame_engaged:!0,kind:e},"*"))}var le=2e3,V=["wheel","touchstart","touchmove","keydown","pointerdown"],X=0;function ue(e){e.isTrusted&&(X=Date.now())}function fe(){addEventListener("click",J,!0),addEventListener("auxclick",J,!0)}function de(){for(let e=0;e<V.length;e++)addEventListener(V[e],ue,{capture:!0,passive:!0});addEventListener("scroll",e=>{e.isTrusted&&Date.now()-X<le&&I("scroll")},{capture:!0,passive:!0}),addEventListener("pointermove",e=>{e.isTrusted&&I("pointer")},{capture:!0,passive:!0}),addEventListener("click",e=>{e.isTrusted&&I("click")},{capture:!0,passive:!0})}var q="__frame_scroll",me=150,pe=310,ge=160,he=3e4;function ve(){let e=0,t=!1,n=!1,u=!1,a=0,r=null;const o=d=>{try{sessionStorage.setItem(q,JSON.stringify({y:d}))}catch{}},i=()=>{if(clearTimeout(e),r===null)return;const d=r;r=null,o(d)},g=()=>{if(t){t=!1;return}n=!0,r=scrollY,clearTimeout(e),e=setTimeout(i,me)};try{addEventListener("scroll",g,{passive:!0}),addEventListener("pagehide",i)}catch{}const y=()=>{let d;try{d=sessionStorage.getItem(q)}catch{return null}if(d===null)return null;let l;try{l=JSON.parse(d)}catch{l=null}const p=l?.y;if(!(typeof p=="number"&&Number.isFinite(p)&&p>=0)){try{sessionStorage.removeItem(q)}catch{}return null}return p};let c=!1;const f=d=>{try{const l=scrollY;scrollTo({top:d,left:0,behavior:"instant"}),a=d,u=!0,clearTimeout(e),r=null,o(d);const p=scrollY;p!==l&&(t=!0),p!==d&&!c&&(c=!0,addEventListener("load",()=>{try{if(scrollY===p){const v=y();f(v!==null?v:a)}}catch{}},{once:!0}))}catch{}},m=()=>{try{return!!location.hash}catch{return!0}};let h=!1;const _=()=>{try{if(h||innerWidth>pe||innerHeight>ge)return;h=!0;const d=Date.now(),l=()=>{try{removeEventListener("resize",l)}catch{}if(Date.now()-d>he||n||m())return;const p=y();f(p!==null?p:a)};addEventListener("resize",l)}catch{}};let w=!1,S=!1;return{restore(){if(w||(w=!0,m()))return;const d=y();d!==null&&(f(d),_())},promoted(){if(S||(S=!0,m()))return;const d=y();d!==null?(f(d),_()):u&&f(a)}}}function _e(e,t,n){const u=[...t.values()].filter(a=>a.targets.some(r=>r.startsWith(e+".")));return{wrap(a,r){const o=`${e}.${a}`,i=u.filter(g=>g.targets.includes(o));return i.length===0?(...g)=>{try{return r(...g)}catch(y){return Promise.reject(y)}}:(...g)=>{let y=g;for(const f of i){const m=f.module.parameters;if(m)try{y=m(y)}catch{return Promise.reject({code:"transform_error",id:f.id,scope:e,message:"parameters transform failed"})}}let c;try{c=r(...y)}catch(f){c=Promise.reject(f)}return c.then(f=>{for(let m=i.length-1;m>=0;m--){const h=i[m],_=h.module.returns;if(_)try{f=_(f)}catch{return n({id:h.id,scope:e,leg:"returns"}),f}}return f},f=>{for(let m=i.length-1;m>=0;m--){const h=i[m],_=h.module.throws;if(_)try{f=_(f)}catch{return n({id:h.id,scope:e,leg:"throws"}),Promise.reject(f)}}return Promise.reject(f)})}}}}function ye(e,t,n,u=()=>{}){const a=new Set(e.changes??[]),r=new Map;for(const o of a){const i=t[o];i&&r.set(o,i)}return{contract:e.contract,changes:a,flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:r,shellOrigin:n.shellOrigin,mount:n.mount,pipe:o=>_e(o,r,u)}}var Ae="modulepreload",Re=function(e){return"/"+e},je={},be=function(t,n,u){let a=Promise.resolve();function r(o){const i=new Event("vite:preloadError",{cancelable:!0});if(i.payload=o,window.dispatchEvent(i),!i.defaultPrevented)throw o}return a.then(o=>{for(const i of o||[])i.status==="rejected"&&r(i.reason);return t().catch(r)})};(function(){const e=Object.defineProperty,t=globalThis,n=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let u=0;for(let a=0;a<n.length;a++){const r=n[a];try{e(t,r,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[r]}catch{}try{e(t,r,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[r]=="function"&&u++}if(u&&window!==top)try{parent.postMessage({__frame_rtc_lockdown_failed:u},"*")}catch{}})();var Ee=1e4,we=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function Q(e){for(const t of we)if(t.endsWith(":*"))try{const n=new URL(e);if(`${n.protocol}//${n.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var k=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),D=window.__FRAME_PREAMBLE?.transforms,z=window.__FRAME_PREAMBLE?.comments,B=window.__FRAME_PREAMBLE?.translate,C=/^[\w.-]+\.js$/,Se=/^[a-z][a-z0-9_-]{0,63}$/,Z=null,M=null;function $(e,t,n){try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:n,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var F=!1;function ee(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,F=!0):F&&(delete t.dataset.theme,t.style.colorScheme="",F=!1)}var te=256,P=Object.assign(Object.create(null),{mcp:Object.assign(Object.create(null),{watchTool:{handlerArg:3}}),db:Object.assign(Object.create(null),{subscribe:{handlerArg:1,errArg:2}})}),L=new Map;function re(e,t){const n=L.get(e);if(!n)return;const u=Object.assign(Object.create(null),t);Object.assign(n.impl,u),n.impl.__settled=()=>Promise.reject({code:"capability_removed",message:`${e}: method not in this runtime`});const a=n.queue;n.queue=[];for(const r of a){const o=u[r.method];if(o)if(P[e]?.[r.method])try{r.resolve(o(...r.args))}catch{T(r,P[e][r.method],{code:"transform_error",message:`${e}.${r.method} rejected its arguments`})}else o(...r.args).then(r.resolve,r.reject);else{const i={code:"capability_removed",message:`${e}.${r.method} is not in this runtime`},g=P[e]?.[r.method];if(g){T(r,g,i);continue}r.reject(i)}}}function Oe(e,t){const n=L.get(e);if(!n)return;n.impl.__settled=()=>Promise.reject(t);const u=n.queue;n.queue=[];for(const a of u){const r=P[e]?.[a.method];if(r){T(a,r,t);continue}a.reject(t)}}function N(e,t){const n=Y[e];if(!n){Oe(e,t);return}re(e,Object.fromEntries(Object.entries(n).map(([u,a])=>[u,()=>Promise.resolve(a)])))}function T(e,t,n){if(e.syncState?.dead)return;const u=t.errArg===void 0?void 0:e.args[t.errArg],a=t.errArg===void 0?e.args[t.handlerArg]:u;typeof a=="function"&&queueMicrotask(()=>{if(!e.syncState?.dead)try{a(t.errArg===void 0?{type:"error",error:n}:n)}catch(r){ie(r)}})}var H=Object.getOwnPropertyDescriptor(window,"claude");if(window!==top&&!(H&&H.writable===!1)){fe(),de();let e=null;try{e=ve()}catch{}const t=H?.value??{};$(window,"claude",t);const n=c=>{const f={impl:Object.create(null),queue:[]};L.set(c,f);const m=f.impl,h=d=>({code:"queue_overflow",message:`${c}.${d}: pre-init call queue is full`}),_=(d,l)=>{if(f.queue.length>=te){const p=Y[c];return p&&d in p?Promise.resolve(p[d]):Promise.reject(h(d))}return new Promise((p,v)=>{f.queue.push({method:d,args:l,resolve:p,reject:v})})},w=ae[c],S=new Proxy(w===void 0?m:(()=>{}),{apply:(d,l,p)=>{const v=w,E=m[v]??m.__settled;return E?E(...p):_(v,p)},get:(d,l)=>{if(typeof l!="string"||l==="then"||l==="toJSON"||l==="valueOf")return;if(l==="toString")return Object.prototype.toString;if(w!==void 0&&(l==="call"||l==="apply"||l==="bind"))return Function.prototype[l];const p=P[c]?.[l];return p?(...v)=>{if(typeof v[p.handlerArg]!="function")throw new TypeError(`${c}.${l} requires a handler function`);const E=m[l];if(E)return E(...v);if(m.__settled){const b={dead:!1},U={args:[...v],syncState:b};return m.__settled().catch(s=>T(U,p,s)),()=>{b.dead=!0}}if(f.queue.length>=te){const b={dead:!1};return T({args:[...v],syncState:b},p,h(l)),()=>{b.dead=!0}}let A=null;const R={dead:!1};return f.queue.push({method:l,args:v,resolve:b=>{A=typeof b=="function"?b:null,R.dead&&A?.()},reject:()=>{},syncState:R}),()=>{R.dead=!0,A?.()}}:(...v)=>{const E=m[l]??m.__settled;return E?E(...v):_(l,v)}},set:()=>!1});c==="db"&&ce(m,(d,l)=>S[d](...l)),$(t,c,S)};for(const c of Object.keys(k)){if(t[c]!==void 0){$(t,c,t[c]);continue}n(c)}let u=null,a=null,r=0;const o=c=>{c.source!==parent||!Q(c.origin)||oe(c.data)&&(u=c.data.__frame_init,M=c.origin,removeEventListener("message",o),clearTimeout(r),a?.())};addEventListener("message",o),parent.postMessage({__frame_connect:!0},"*");const i=new Promise(c=>{a=c,r=setTimeout(()=>{removeEventListener("message",o),c()},Ee)}),g=document.readyState==="loading"?new Promise(c=>document.addEventListener("DOMContentLoaded",()=>c(),{once:!0})):Promise.resolve();g.then(()=>{try{e?.restore()}catch{}});const y=c=>{if(!(c.source!==parent||!Q(c.origin))&&W(c.data)){removeEventListener("message",y);try{e?.promoted()}catch{}}};addEventListener("message",y),i.then(async()=>{if(!u||!M){for(const s of L.keys())N(s,{code:"not_granted",message:"frame initialization did not arrive - capability unavailable"});return}ee(u.theme);const c=M;let f=!1,m=!1;addEventListener("message",s=>{if(s.source!==parent||s.origin!==c)return;se(s.data)&&ee(s.data.__frame_theme.theme);const O=s.data?.__fc_mode;O&&typeof O=="object"&&!f&&z&&C.test(z)&&(f=!0,h(z).then(K=>K.install?.(c,O.on===!0)).catch(()=>{}));const j=s.data?.__ft_cmd;j&&typeof j=="object"&&!m&&B&&C.test(B)&&(m=!0,h(B).then(K=>K.install?.(c,j)).catch(()=>{}))});const h=s=>be(()=>import("/_runtime/"+s),void 0),_=Object.keys(u.capabilities??{});for(const s of _)Object.hasOwn(k,s)||Se.test(s)&&t[s]===void 0&&(n(s),N(s,{code:"capability_disabled",message:"capability not in this runtime generation"}));const w=_.filter(s=>Object.hasOwn(k,s)).map(s=>[s,k[s]]).filter(s=>typeof s[1]=="string"&&C.test(s[1])),[S,...d]=await Promise.allSettled([D&&C.test(D)?h(D):Promise.resolve({}),...w.map(([,s])=>h(s))]),l=M;Z=ye(u,S.status==="fulfilled"&&S.value?.TRANSFORMS||{},{shellOrigin:l,mount:re},s=>parent.postMessage({__frame_cap_telemetry:s},l));const p=s=>parent.postMessage({__frame_cap_telemetry:{kind:"cap-load-error",cap:s}},l),v=Z;d.forEach((s,O)=>{const j=w[O][0];if(s.status!=="fulfilled"){p(j);return}try{s.value?.install?.(v)}catch{p(j)}});for(const[s,O]of L)if(!(O.queue.length===0&&Object.keys(O.impl).length>0)){if(_.includes(s)){N(s,{code:"capability_disabled",message:"capability not available in this session"});continue}N(s,{code:"not_granted",message:"capability not available in this session"})}await g,parent.postMessage({__frame_ready:!0},M);let E=-1,A=0;const R=()=>{A=0;const s=Math.max(document.documentElement.scrollHeight,document.body?document.body.scrollHeight:0);s!==E&&(E=s,parent.postMessage({__frame_size:!0,h:s},l))},b=()=>{A||(A=setTimeout(R,200))},U=new ResizeObserver(b);U.observe(document.documentElement),document.body&&U.observe(document.body),document.addEventListener("load",b,!0),document.fonts?.ready.then(b,()=>{}),addEventListener("beforeprint",()=>{E=-1,R()}),b(),addEventListener("message",s=>{if(!(s.source!==parent||s.origin!==l)&&W(s.data)){try{e?.promoted()}catch{}E=-1,b()}})})}})();</script><!-- /frame-runtime --><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<style>
+  :root{
+    --page-bg:#FAF8F4;
+    --page-bg-deep:#F1ECE2;
+    --page-text:#2B2620;
+    --page-text-soft:#6B6154;
+    --page-accent:#8C6A3B;
+    --page-line:#E4DCCB;
+    --card-shadow: 0 1px 2px rgba(43,38,32,.06), 0 8px 24px -12px rgba(43,38,32,.18);
+
+    --app-cream:#FBF6EC;
+    --app-cream-deep:#F3EAD9;
+    --app-card:#FFFFFF;
+    --app-charcoal:#362F27;
+    --app-charcoal-soft:#6B5F53;
+    --app-gold:#B8935A;
+    --app-gold-deep:#8C6A3B;
+    --app-blush:#E3B8B0;
+    --app-blush-deep:#C98B82;
+    --app-line:#E8DFCF;
+
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --page-bg:#1C1A17;
+      --page-bg-deep:#252019;
+      --page-text:#EDE7DC;
+      --page-text-soft:#B3A996;
+      --page-accent:#CBA36C;
+      --page-line:#3A342B;
+      --card-shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --page-bg:#1C1A17;
+    --page-bg-deep:#252019;
+    --page-text:#EDE7DC;
+    --page-text-soft:#B3A996;
+    --page-accent:#CBA36C;
+    --page-line:#3A342B;
+    --card-shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+  :root[data-theme="light"]{
+    --page-bg:#FAF8F4;
+    --page-bg-deep:#F1ECE2;
+    --page-text:#2B2620;
+    --page-text-soft:#6B6154;
+    --page-accent:#8C6A3B;
+    --page-line:#E4DCCB;
+    --card-shadow: 0 1px 2px rgba(43,38,32,.06), 0 8px 24px -12px rgba(43,38,32,.18);
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0;}
+  .page{
+    background:var(--page-bg);
+    color:var(--page-text);
+    font-family:var(--sans);
+    min-height:100vh;
+    padding:56px 24px 80px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  /* ---- header ---- */
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--page-accent);
+    margin:0 0 14px;
+  }
+  h1.title{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(32px,5vw,48px);
+    line-height:1.08;
+    letter-spacing:-.01em;
+    margin:0 0 16px;
+    text-wrap:balance;
+    max-width:16ch;
+  }
+  .dek{
+    font-size:16px;
+    line-height:1.6;
+    color:var(--page-text-soft);
+    max-width:62ch;
+    margin:0;
+  }
+  .dek em{font-style:normal;color:var(--page-text);}
+
+  /* ---- system reference ---- */
+  .system{
+    display:flex;
+    flex-wrap:wrap;
+    gap:48px;
+    margin:52px 0 64px;
+    padding:28px 32px;
+    background:var(--page-bg-deep);
+    border:1px solid var(--page-line);
+    border-radius:16px;
+  }
+  .swatches{display:flex; gap:18px; flex-wrap:wrap;}
+  .swatch{display:flex; flex-direction:column; align-items:center; gap:8px; width:64px;}
+  .swatch .chip{
+    width:44px;height:44px;border-radius:50%;
+    box-shadow:0 1px 2px rgba(0,0,0,.12), inset 0 0 0 1px rgba(0,0,0,.06);
+  }
+  .swatch .name{font-size:11px; font-weight:600; text-align:center; line-height:1.3;}
+  .swatch .hex{font-size:10px; color:var(--page-text-soft); font-variant-numeric:tabular-nums;}
+
+  .type-sample{display:flex; gap:36px; align-items:flex-end; flex-wrap:wrap;}
+  .type-sample .cell{display:flex; flex-direction:column; gap:4px;}
+  .type-sample .glyphs{font-size:40px; line-height:1;}
+  .type-sample .serif-g{font-family:var(--serif); font-weight:600;}
+  .type-sample .sans-g{font-family:var(--sans); font-weight:600;}
+  .type-sample .label{font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--page-text-soft);}
+
+  .system-col-label{
+    font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--page-text-soft); margin-bottom:14px; display:block;
+  }
+
+  /* ---- filmstrip ---- */
+  .filmstrip{
+    display:flex;
+    gap:40px;
+    overflow-x:auto;
+    padding:12px 4px 24px;
+    scroll-snap-type:x proximity;
+  }
+  .phone-block{
+    display:flex; flex-direction:column; align-items:center; gap:16px;
+    scroll-snap-align:start;
+    flex:0 0 auto;
+    opacity:0;
+    transform:translateY(14px);
+    animation:rise .6s ease forwards;
+  }
+  .phone-block:nth-child(1){animation-delay:.05s;}
+  .phone-block:nth-child(2){animation-delay:.18s;}
+  .phone-block:nth-child(3){animation-delay:.31s;}
+  .phone-block:nth-child(4){animation-delay:.44s;}
+  .phone-block:nth-child(5){animation-delay:.57s;}
+  .phone-block:nth-child(6){animation-delay:.7s;}
+  @keyframes rise{to{opacity:1; transform:translateY(0);}}
+  @media (prefers-reduced-motion: reduce){
+    .phone-block{animation:none; opacity:1; transform:none;}
+  }
+
+  .phone-caption{text-align:center; max-width:280px;}
+  .phone-caption .name{font-family:var(--serif); font-size:17px; font-weight:600; margin:0 0 3px;}
+  .phone-caption .desc{font-size:12.5px; color:var(--page-text-soft); line-height:1.5; margin:0;}
+
+  .phone{
+    width:284px;
+    height:588px;
+    background:var(--app-charcoal);
+    border-radius:44px;
+    padding:12px;
+    box-shadow:var(--card-shadow);
+    transition:transform .25s ease;
+  }
+  .phone:hover{transform:translateY(-4px);}
+  .screen{
+    position:relative;
+    width:100%; height:100%;
+    background:var(--app-cream);
+    border-radius:32px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    font-family:var(--sans);
+    color:var(--app-charcoal);
+  }
+  .statusbar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 22px 4px;
+    font-size:13px; font-weight:600; font-variant-numeric:tabular-nums;
+    color:var(--app-charcoal);
+    flex:0 0 auto;
+  }
+  .statusbar .icons{display:flex; gap:5px; align-items:center;}
+  .home-indicator{
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:120px; height:4px; border-radius:3px; background:var(--app-charcoal);
+    opacity:.28;
+  }
+
+  /* ---- home screen ---- */
+  .home-body{flex:1; overflow:hidden; padding:0; display:flex; flex-direction:column;}
+  .hero-panel{flex:0 0 auto; padding:14px 20px 12px;}
+  .h-eyebrow{
+    font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--app-gold-deep); margin:0 0 6px;
+  }
+  .h-couple{
+    font-family:var(--serif); font-weight:600; font-size:24px; line-height:1.14;
+    margin:0 0 6px; color:var(--app-charcoal); letter-spacing:.01em;
+  }
+  .h-rule{width:26px; height:1px; background:var(--app-gold-deep); border:none; margin:0 0 6px;}
+  .h-date{font-size:12px; color:var(--app-charcoal-soft); margin:0;}
+  .home-content{padding:4px 20px 0; flex:1; display:flex; flex-direction:column; overflow:hidden; border-top:1px solid var(--app-line);}
+  .h-section-label{
+    font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--app-charcoal-soft); margin:10px 0 8px;
+  }
+
+  .cat-grid{display:grid; grid-template-columns:1fr 1fr; gap:7px;}
+  .tile{
+    position:relative; border-radius:12px; overflow:hidden; height:84px;
+    display:flex; align-items:flex-end; padding:9px;
+  }
+  .tile::after{content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(54,47,39,.6) 0%, rgba(54,47,39,0) 60%);}
+  .tile-label{position:relative; z-index:1; color:#fff; font-family:var(--serif); font-size:12.5px; font-weight:600; letter-spacing:.01em; text-shadow:0 1px 3px rgba(0,0,0,.2);}
+  .tile.wide{grid-column:1 / -1; height:56px;}
+
+  .t-blush{background:linear-gradient(135deg, var(--app-blush) 0%, var(--app-cream-deep) 100%);}
+  .t-gold{background:linear-gradient(135deg, var(--app-gold) 0%, var(--app-cream-deep) 100%);}
+  .t-charcoal{background:linear-gradient(150deg, var(--app-charcoal) 0%, var(--app-blush) 100%);}
+  .t-hero{background:linear-gradient(160deg, #D9BFAE 0%, var(--app-blush) 55%, var(--app-cream-deep) 100%);}
+  .t-shimmer{background:linear-gradient(135deg, var(--app-cream-deep) 0%, var(--app-gold) 130%);}
+
+  .bottom-nav{
+    flex:0 0 auto; display:flex; justify-content:space-around; align-items:center;
+    padding:10px 0 4px; border-top:1px solid var(--app-line); background:var(--app-cream);
+  }
+  .nav-item{display:flex; flex-direction:column; align-items:center; gap:3px;}
+  .nav-item svg{width:20px; height:20px; stroke-width:1.7; fill:none;}
+  .nav-item .nav-label{font-size:9.5px; font-weight:600;}
+  .nav-item.active svg{stroke:var(--app-gold-deep);}
+  .nav-item.active .nav-label{color:var(--app-gold-deep);}
+  .nav-item:not(.active) svg{stroke:var(--app-charcoal-soft); opacity:.6;}
+  .nav-item:not(.active) .nav-label{color:var(--app-charcoal-soft); opacity:.7;}
+
+  /* ---- category list screen ---- */
+  .list-header{padding:14px 20px 12px; flex:0 0 auto;}
+  .list-header .top-row{display:flex; align-items:center; gap:10px; margin-bottom:2px;}
+  .list-header svg.back{width:18px; height:18px; stroke:var(--app-charcoal); stroke-width:1.8; fill:none;}
+  .list-header h2{font-family:var(--serif); font-size:21px; font-weight:600; margin:0;}
+  .list-header .sub{font-size:11.5px; color:var(--app-charcoal-soft); margin:2px 0 0 28px;}
+
+  .vendor-feed{flex:1; overflow:hidden; padding:0 16px 12px; display:flex; flex-direction:column;}
+  .v-item{padding:8px 0; border-bottom:1px solid var(--app-line);}
+  .v-item:first-child{padding-top:0;}
+  .v-item:last-child{border-bottom:none;}
+  .v-photo{
+    position:relative; height:72px; border-radius:12px; overflow:hidden; margin-bottom:6px;
+    display:flex; align-items:flex-end;
+  }
+  .v-photo::after{content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(54,47,39,.6) 0%, rgba(54,47,39,0) 55%);}
+  .v-photo .v-tag{
+    position:absolute; top:7px; left:7px; z-index:1; background:rgba(255,255,255,.88);
+    color:var(--app-gold-deep); font-size:8.5px; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; padding:3px 8px; border-radius:20px;
+  }
+  .v-photo .heart-btn{
+    position:absolute; top:7px; right:7px; z-index:1; width:22px; height:22px; border-radius:50%;
+    background:rgba(255,255,255,.88); display:flex; align-items:center; justify-content:center;
+  }
+  .v-photo .heart-btn .heart{width:12px; height:12px;}
+  .v-name-on{
+    position:relative; z-index:1; color:#fff; font-family:var(--serif); font-size:13.5px; font-weight:600;
+    margin:0; padding:0 10px 7px; text-shadow:0 1px 3px rgba(0,0,0,.25);
+  }
+  .v-meta-row{display:flex; justify-content:space-between; align-items:baseline; gap:6px;}
+  .v-addr{font-size:11px; color:var(--app-charcoal-soft); margin:0; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .v-cap{font-size:10px; color:var(--app-gold-deep); font-weight:600; margin:0; flex:0 0 auto;}
+  .chosen-note{font-size:10px; font-weight:700; color:var(--app-gold-deep); margin:0; flex:0 0 auto; white-space:nowrap;}
+  .v-tag.cat{background:rgba(54,47,39,.6); color:#fff;}
+  .heart{width:17px; height:17px; stroke:var(--app-gold-deep); stroke-width:1.6; flex:0 0 auto;}
+  .heart.filled{fill:var(--app-gold-deep);}
+  .heart:not(.filled){fill:none;}
+
+  /* ---- my wedding screen ---- */
+  .mw-progress{padding:2px 20px 10px; flex:0 0 auto; border-bottom:1px solid var(--app-line);}
+  .mw-progress .p-row{font-size:11px; color:var(--app-charcoal-soft); margin:0 0 6px;}
+  .mw-progress .p-row strong{color:var(--app-charcoal); font-weight:700;}
+  .progress-track{height:4px; border-radius:2px; background:var(--app-line); overflow:hidden;}
+  .progress-fill{height:100%; background:var(--app-gold-deep); border-radius:2px;}
+
+  .mw-list{flex:1; overflow:hidden; padding:10px 16px 12px; display:flex; flex-direction:column; gap:6px;}
+  .mw-row{display:flex; align-items:center; gap:10px; padding:6px; border-radius:12px; background:var(--app-card); border:1px solid var(--app-line);}
+  .mw-row.empty{background:transparent; border:1px dashed var(--app-line);}
+  .mw-thumb{width:36px; height:36px; border-radius:8px; flex:0 0 auto;}
+  .mw-row.empty .mw-thumb{background:var(--app-cream-deep);}
+  .mw-text{flex:1; min-width:0;}
+  .mw-cat{font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--app-charcoal-soft); margin:0 0 1px;}
+  .mw-name{font-family:var(--serif); font-size:13px; font-weight:600; margin:0; color:var(--app-charcoal);}
+  .mw-empty-text{font-size:11px; color:var(--app-charcoal-soft); font-style:italic; margin:0;}
+  .mw-chevron{width:14px; height:14px; stroke:var(--app-charcoal-soft); stroke-width:1.8; fill:none; flex:0 0 auto;}
+
+  /* ---- profile screen ---- */
+  .profile-header{display:flex; flex-direction:column; align-items:center; padding:22px 20px 12px; text-align:center; flex:0 0 auto;}
+  .avatar{
+    width:60px; height:60px; border-radius:50%;
+    background:linear-gradient(160deg, #D9BFAE 0%, var(--app-blush) 60%, var(--app-cream-deep) 100%);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif); font-size:18px; font-weight:600; color:var(--app-charcoal); margin-bottom:10px;
+  }
+  .profile-info{flex:1; overflow:hidden; padding:0 20px; border-top:1px solid var(--app-line); display:flex; flex-direction:column;}
+  .info-row{display:flex; justify-content:space-between; align-items:center; padding:11px 0; border-bottom:1px solid var(--app-line);}
+  .info-row .i-label{font-size:11px; color:var(--app-charcoal-soft);}
+  .info-row .i-value{font-size:12.5px; font-weight:600; color:var(--app-charcoal); font-family:var(--sans);}
+  .info-row.link .i-label{color:var(--app-charcoal); font-weight:600;}
+  .info-row.link svg{width:14px; height:14px; stroke:var(--app-charcoal-soft); stroke-width:1.8; fill:none;}
+  .logout-wrap{padding:14px 20px 14px; flex:0 0 auto;}
+  .btn.logout{width:100%; background:transparent; border:1.4px solid var(--app-line); color:var(--app-charcoal-soft);}
+  .btn.logout svg{stroke:var(--app-charcoal-soft);}
+
+  /* ---- vendor profile screen ---- */
+  .hero{
+    position:relative; height:190px; flex:0 0 auto;
+    background:linear-gradient(160deg, #D9BFAE 0%, var(--app-blush) 55%, var(--app-cream-deep) 100%);
+  }
+  .hero-btn{
+    position:absolute; top:14px; width:30px; height:30px; border-radius:50%;
+    background:rgba(255,255,255,.85); display:flex; align-items:center; justify-content:center;
+  }
+  .hero-btn.back{left:14px;}
+  .hero-btn.fav{right:14px;}
+  .hero-btn svg{width:15px; height:15px;}
+  .hero-dots{position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:5px;}
+  .hero-dots span{width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.65);}
+  .hero-dots span.on{background:#fff;}
+
+  .profile-body{flex:1; overflow:hidden; padding:16px 20px 0; display:flex; flex-direction:column;}
+  .p-name{font-family:var(--serif); font-size:22px; font-weight:600; margin:0 0 4px;}
+  .p-meta{display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--app-charcoal-soft); margin:0 0 12px;}
+  .p-meta svg{width:13px; height:13px; stroke:var(--app-charcoal-soft); stroke-width:1.6; fill:none;}
+  .p-desc{font-size:12px; line-height:1.55; color:var(--app-charcoal-soft); margin:0 0 16px;}
+
+  .cal-wrap{margin-bottom:14px;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-top:8px;}
+  .cal-cell{
+    aspect-ratio:1; border-radius:5px; display:flex; align-items:center; justify-content:center;
+    font-size:8.5px; color:var(--app-charcoal-soft); background:var(--app-cream-deep);
+  }
+  .cal-cell.busy{background:var(--app-blush-deep); color:#fff; font-weight:600;}
+  .cal-cell.empty{background:transparent;}
+  .cal-legend{display:flex; align-items:center; gap:5px; font-size:9.5px; color:var(--app-charcoal-soft); margin-top:6px;}
+  .cal-legend .dot{width:7px; height:7px; border-radius:2px; background:var(--app-blush-deep);}
+
+  .contact-row{display:flex; gap:8px; padding:0 0 14px; margin-top:auto;}
+  .btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    border-radius:12px; padding:11px 0; font-size:12.5px; font-weight:700; font-family:var(--sans);
+  }
+  .btn svg{width:14px; height:14px; stroke-width:1.8;}
+  .btn.solid{background:var(--app-gold); color:#fff;}
+  .btn.solid svg{stroke:#fff;}
+  .btn.outline{background:transparent; border:1.4px solid var(--app-blush-deep); color:var(--app-charcoal);}
+  .btn.outline svg{stroke:var(--app-charcoal);}
+
+  footer.note{
+    margin-top:56px; padding-top:20px; border-top:1px solid var(--page-line);
+    font-size:12.5px; color:var(--page-text-soft); max-width:70ch; line-height:1.6;
+  }
+
+  @media (max-width:640px){
+    .page{padding:40px 16px 64px;}
+    .system{padding:22px;}
+  }
+</style>
+
+<div class="page">
+  <div class="wrap">
+    <p class="eyebrow">Wedding App — Visual Direction</p>
+    <h1 class="title">The look, before the build</h1>
+    <p class="dek">Palette, type, and six reference screens — <em>Home, Venues, Vendor profile, Favorites, My Wedding, Profile</em> — worked out per <em>PROJECT_BRIEF.md</em>. <em>My Wedding</em> is a proposed new tab, not yet in the brief: one slot per category for the vendor you've actually chosen, separate from the longer list of "maybes" in Favorites. Shown with real Zrenjanin-style content, in Serbian, since that's what a couple using the app would actually read.</p>
+
+    <div class="system">
+      <div>
+        <span class="system-col-label">Palette</span>
+        <div class="swatches">
+          <div class="swatch"><div class="chip" style="background:#FBF6EC; border:1px solid #E8DFCF;"></div><div class="name">Cream</div><div class="hex">#FBF6EC</div></div>
+          <div class="swatch"><div class="chip" style="background:#362F27;"></div><div class="name">Charcoal</div><div class="hex">#362F27</div></div>
+          <div class="swatch"><div class="chip" style="background:#B8935A;"></div><div class="name">Muted Gold</div><div class="hex">#B8935A</div></div>
+          <div class="swatch"><div class="chip" style="background:#E3B8B0;"></div><div class="name">Blush</div><div class="hex">#E3B8B0</div></div>
+          <div class="swatch"><div class="chip" style="background:#8C6A3B;"></div><div class="name">Deep Gold</div><div class="hex">#8C6A3B</div></div>
+        </div>
+      </div>
+      <div>
+        <span class="system-col-label">Type</span>
+        <div class="type-sample">
+          <div class="cell">
+            <span class="glyphs serif-g">Aa</span>
+            <span class="label">Display — Playfair Display</span>
+          </div>
+          <div class="cell">
+            <span class="glyphs sans-g">Aa</span>
+            <span class="label">Body — Inter</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filmstrip">
+      <!-- SCREEN 1: HOME -->
+      <div class="phone-block">
+        <div class="phone">
+          <div class="screen">
+            <div class="statusbar">
+              <span>9:41</span>
+              <span class="icons">
+                <svg width="14" height="10" viewBox="0 0 14 10"><rect x="0" y="6" width="2" height="4" fill="currentColor"/><rect x="4" y="4" width="2" height="6" fill="currentColor"/><rect x="8" y="1" width="2" height="9" fill="currentColor"/></svg>
+                <svg width="20" height="10" viewBox="0 0 20 10"><rect x="0.5" y="0.5" width="17" height="9" rx="2" stroke="currentColor" fill="none"/><rect x="2" y="2" width="13" height="6" rx="1" fill="currentColor"/></svg>
+              </span>
+            </div>
+            <div class="home-body">
+              <div class="hero-panel">
+                <p class="h-eyebrow">128 dana do velikog dana</p>
+                <h2 class="h-couple">Marija &amp; Petar</h2>
+                <hr class="h-rule">
+                <p class="h-date">Venčanje &middot; 15. maj 2026.</p>
+              </div>
+              <div class="home-content">
+                <p class="h-section-label">Kategorije</p>
+                <div class="cat-grid">
+                  <div class="tile t-hero"><span class="tile-label">Sale</span></div>
+                  <div class="tile t-charcoal"><span class="tile-label">Bendovi</span></div>
+                  <div class="tile t-gold"><span class="tile-label">Fotografi</span></div>
+                  <div class="tile t-blush"><span class="tile-label">Frizura i šminka</span></div>
+                  <div class="tile t-shimmer"><span class="tile-label">Nakit</span></div>
+                  <div class="tile t-blush"><span class="tile-label">Venčanice</span></div>
+                  <div class="tile t-hero wide"><span class="tile-label">Dekoracija</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/></svg><span class="nav-label">Početna</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg><span class="nav-label">Omiljeno</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="9" cy="14" r="5"/><circle cx="15" cy="10" r="5"/></svg><span class="nav-label">Venčanje</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span class="nav-label">Profil</span></div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <p class="name">Home</p>
+          <p class="desc">Countdown header + category grid — the screen every session opens on.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 2: CATEGORY LIST -->
+      <div class="phone-block">
+        <div class="phone">
+          <div class="screen">
+            <div class="statusbar">
+              <span>9:41</span>
+              <span class="icons">
+                <svg width="14" height="10" viewBox="0 0 14 10"><rect x="0" y="6" width="2" height="4" fill="currentColor"/><rect x="4" y="4" width="2" height="6" fill="currentColor"/><rect x="8" y="1" width="2" height="9" fill="currentColor"/></svg>
+                <svg width="20" height="10" viewBox="0 0 20 10"><rect x="0.5" y="0.5" width="17" height="9" rx="2" stroke="currentColor" fill="none"/><rect x="2" y="2" width="13" height="6" rx="1" fill="currentColor"/></svg>
+              </span>
+            </div>
+            <div class="list-header">
+              <div class="top-row">
+                <svg class="back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+                <h2>Sale</h2>
+              </div>
+              <p class="sub">12 objekata u Zrenjaninu</p>
+            </div>
+            <div class="vendor-feed">
+              <div class="v-item">
+                <div class="v-photo t-hero">
+                  <span class="v-tag">Preporučeno</span>
+                  <div class="heart-btn"><svg class="heart filled" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg></div>
+                  <p class="v-name-on">Vila Rosa</p>
+                </div>
+                <div class="v-meta-row"><p class="v-addr">Ulica Kralja Aleksandra 12</p><p class="v-cap">Do 150 gostiju</p></div>
+              </div>
+              <div class="v-item">
+                <div class="v-photo t-gold">
+                  <div class="heart-btn"><svg class="heart filled" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg></div>
+                  <p class="v-name-on">Sala Diamant</p>
+                </div>
+                <div class="v-meta-row"><p class="v-addr">Novosadski put 5</p><p class="v-cap">Do 220 gostiju</p></div>
+              </div>
+              <div class="v-item">
+                <div class="v-photo t-charcoal">
+                  <div class="heart-btn"><svg class="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg></div>
+                  <p class="v-name-on">Dvorana Junior</p>
+                </div>
+                <div class="v-meta-row"><p class="v-addr">Trg Slobode 3</p><p class="v-cap">Do 90 gostiju</p></div>
+              </div>
+              <div class="v-item">
+                <div class="v-photo t-blush">
+                  <div class="heart-btn"><svg class="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg></div>
+                  <p class="v-name-on">Vila Lipa</p>
+                </div>
+                <div class="v-meta-row"><p class="v-addr">Cara Dušana 44</p><p class="v-cap">Do 130 gostiju</p></div>
+              </div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <p class="name">Category list</p>
+          <p class="desc">No price filter, per brief — just the vendor, name, and a favorite toggle.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 3: VENDOR PROFILE -->
+      <div class="phone-block">
+        <div class="phone">
+          <div class="screen">
+            <div class="hero">
+              <div class="hero-btn back"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M15 5l-7 7 7 7" stroke="#362F27" stroke-width="2" fill="none"/></svg></div>
+              <div class="hero-btn fav"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z" fill="#8C6A3B"/></svg></div>
+              <div class="hero-dots"><span class="on"></span><span></span><span></span></div>
+            </div>
+            <div class="profile-body">
+              <h2 class="p-name">Vila Rosa</h2>
+              <hr class="h-rule">
+              <p class="p-meta"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><circle cx="5" cy="10" r="2.2"/><circle cx="19" cy="10" r="2.2"/><path d="M2 20c0-3 2.5-5 5-5M22 20c0-3-2.5-5-5-5M7 20c0-4 2.5-6.5 5-6.5S17 16 17 20"/></svg>Do 150 gostiju</p>
+              <p class="p-desc">Elegantna sala u centru Zrenjanina, sa baštom i prostorom za venčanja i proslave do 150 gostiju.</p>
+              <div class="cal-wrap">
+                <p class="h-section-label" style="margin-bottom:0;">Dostupnost &middot; maj</p>
+                <div class="cal-grid">
+                  <div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div>
+                  <div class="cal-cell">1</div><div class="cal-cell">2</div><div class="cal-cell busy">3</div><div class="cal-cell busy">4</div>
+                  <div class="cal-cell">5</div><div class="cal-cell">6</div><div class="cal-cell">7</div><div class="cal-cell">8</div><div class="cal-cell">9</div><div class="cal-cell">10</div><div class="cal-cell busy">11</div>
+                  <div class="cal-cell busy">12</div><div class="cal-cell">13</div><div class="cal-cell">14</div><div class="cal-cell">15</div><div class="cal-cell">16</div><div class="cal-cell">17</div><div class="cal-cell busy">18</div>
+                  <div class="cal-cell">19</div><div class="cal-cell">20</div><div class="cal-cell">21</div><div class="cal-cell">22</div><div class="cal-cell">23</div><div class="cal-cell">24</div><div class="cal-cell busy">25</div>
+                </div>
+                <div class="cal-legend"><span class="dot"></span>Zauzeto</div>
+              </div>
+              <div class="contact-row">
+                <div class="btn solid"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.7a2 2 0 01-.4 2.1L8 9.9a16 16 0 006 6l1.4-1.4a2 2 0 012.1-.4c.9.3 1.8.5 2.7.6a2 2 0 011.8 2.2z"/></svg>Pozovi</div>
+                <div class="btn outline"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>Instagram</div>
+              </div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <p class="name">Vendor profile</p>
+          <p class="desc">Capacity as a plain number, calendar view-only, call + Instagram — no messaging, no booking.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 4: FAVORITES -->
+      <div class="phone-block">
+        <div class="phone">
+          <div class="screen">
+            <div class="statusbar">
+              <span>9:41</span>
+              <span class="icons">
+                <svg width="14" height="10" viewBox="0 0 14 10"><rect x="0" y="6" width="2" height="4" fill="currentColor"/><rect x="4" y="4" width="2" height="6" fill="currentColor"/><rect x="8" y="1" width="2" height="9" fill="currentColor"/></svg>
+                <svg width="20" height="10" viewBox="0 0 20 10"><rect x="0.5" y="0.5" width="17" height="9" rx="2" stroke="currentColor" fill="none"/><rect x="2" y="2" width="13" height="6" rx="1" fill="currentColor"/></svg>
+              </span>
+            </div>
+            <div class="list-header">
+              <div class="top-row"><h2>Omiljeno</h2></div>
+              <p class="sub" style="margin-left:0;">18 sačuvanih dobavljača</p>
+            </div>
+            <div class="vendor-feed">
+              <p class="h-section-label" style="margin:2px 0 6px;">Sale</p>
+              <div class="v-item">
+                <div class="v-photo t-hero">
+                  <span class="v-tag cat">Sale</span>
+                  <div class="heart-btn"><svg class="heart filled" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg></div>
+                  <p class="v-name-on">Vila Rosa</p>
+                </div>
+                <div class="v-meta-row"><p class="v-addr">Ulica Kralja Aleksandra 12</p><span class="chosen-note">★ Izabrano</span></div>
+              </div>
+              <div class="v-item">
+                <div class="v-photo t-gold">
+                  <span class="v-tag cat">Sale</span>
+                  <div class="heart-btn"><svg class="heart filled" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg></div>
+                  <p class="v-name-on">Sala Diamant</p>
+                </div>
+                <div class="v-meta-row"><p class="v-addr">Novosadski put 5</p></div>
+              </div>
+              <p class="h-section-label" style="margin:8px 0 6px;">Fotografi</p>
+              <div class="v-item">
+                <div class="v-photo t-charcoal">
+                  <span class="v-tag cat">Fotografi</span>
+                  <div class="heart-btn"><svg class="heart filled" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg></div>
+                  <p class="v-name-on">Foto Atelje Nikolić</p>
+                </div>
+                <div class="v-meta-row"><p class="v-addr">Trg Slobode 8</p><span class="chosen-note">★ Izabrano</span></div>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/></svg><span class="nav-label">Početna</span></div>
+              <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg><span class="nav-label">Omiljeno</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="9" cy="14" r="5"/><circle cx="15" cy="10" r="5"/></svg><span class="nav-label">Venčanje</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span class="nav-label">Profil</span></div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <p class="name">Favorites</p>
+          <p class="desc">Every "maybe," grouped by category — a gold ★ marks the one you've actually chosen.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 5: MY WEDDING -->
+      <div class="phone-block">
+        <div class="phone">
+          <div class="screen">
+            <div class="statusbar">
+              <span>9:41</span>
+              <span class="icons">
+                <svg width="14" height="10" viewBox="0 0 14 10"><rect x="0" y="6" width="2" height="4" fill="currentColor"/><rect x="4" y="4" width="2" height="6" fill="currentColor"/><rect x="8" y="1" width="2" height="9" fill="currentColor"/></svg>
+                <svg width="20" height="10" viewBox="0 0 20 10"><rect x="0.5" y="0.5" width="17" height="9" rx="2" stroke="currentColor" fill="none"/><rect x="2" y="2" width="13" height="6" rx="1" fill="currentColor"/></svg>
+              </span>
+            </div>
+            <div class="list-header">
+              <div class="top-row"><h2>Moje venčanje</h2></div>
+              <p class="sub" style="margin-left:0;">Vaš izbor po kategorijama</p>
+            </div>
+            <div class="mw-progress">
+              <p class="p-row"><strong>4</strong> od 7 izabrano</p>
+              <div class="progress-track"><div class="progress-fill" style="width:57%;"></div></div>
+            </div>
+            <div class="mw-list">
+              <div class="mw-row">
+                <div class="mw-thumb t-hero"></div>
+                <div class="mw-text"><p class="mw-cat">Sale</p><p class="mw-name">Vila Rosa</p></div>
+                <svg class="mw-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+              </div>
+              <div class="mw-row">
+                <div class="mw-thumb t-charcoal"></div>
+                <div class="mw-text"><p class="mw-cat">Fotografi</p><p class="mw-name">Foto Atelje Nikolić</p></div>
+                <svg class="mw-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+              </div>
+              <div class="mw-row">
+                <div class="mw-thumb t-gold"></div>
+                <div class="mw-text"><p class="mw-cat">Nakit</p><p class="mw-name">Zlatara Sofija</p></div>
+                <svg class="mw-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+              </div>
+              <div class="mw-row">
+                <div class="mw-thumb t-blush"></div>
+                <div class="mw-text"><p class="mw-cat">Venčanice</p><p class="mw-name">Salon Bela Ruža</p></div>
+                <svg class="mw-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+              </div>
+              <div class="mw-row empty">
+                <div class="mw-thumb"></div>
+                <div class="mw-text"><p class="mw-cat">Bendovi</p><p class="mw-empty-text">Nije izabrano</p></div>
+                <svg class="mw-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+              </div>
+              <div class="mw-row empty">
+                <div class="mw-thumb"></div>
+                <div class="mw-text"><p class="mw-cat">Frizura i šminka</p><p class="mw-empty-text">Nije izabrano</p></div>
+                <svg class="mw-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+              </div>
+              <div class="mw-row empty">
+                <div class="mw-thumb"></div>
+                <div class="mw-text"><p class="mw-cat">Dekoracija</p><p class="mw-empty-text">Nije izabrano</p></div>
+                <svg class="mw-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/></svg><span class="nav-label">Početna</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg><span class="nav-label">Omiljeno</span></div>
+              <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="9" cy="14" r="5"/><circle cx="15" cy="10" r="5"/></svg><span class="nav-label">Venčanje</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span class="nav-label">Profil</span></div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <p class="name">My Wedding</p>
+          <p class="desc">New concept: one slot per category, filled from your chosen favorite or empty until you pick one.</p>
+        </div>
+      </div>
+
+      <!-- SCREEN 6: PROFILE -->
+      <div class="phone-block">
+        <div class="phone">
+          <div class="screen">
+            <div class="statusbar">
+              <span>9:41</span>
+              <span class="icons">
+                <svg width="14" height="10" viewBox="0 0 14 10"><rect x="0" y="6" width="2" height="4" fill="currentColor"/><rect x="4" y="4" width="2" height="6" fill="currentColor"/><rect x="8" y="1" width="2" height="9" fill="currentColor"/></svg>
+                <svg width="20" height="10" viewBox="0 0 20 10"><rect x="0.5" y="0.5" width="17" height="9" rx="2" stroke="currentColor" fill="none"/><rect x="2" y="2" width="13" height="6" rx="1" fill="currentColor"/></svg>
+              </span>
+            </div>
+            <div class="profile-header">
+              <div class="avatar">M&amp;P</div>
+              <h2 class="h-couple" style="font-size:22px;">Marija &amp; Petar</h2>
+              <hr class="h-rule">
+              <p class="h-eyebrow" style="margin:0;">128 dana do venčanja</p>
+            </div>
+            <div class="profile-info">
+              <div class="info-row"><span class="i-label">Email</span><span class="i-value">marija.petar@gmail.com</span></div>
+              <div class="info-row"><span class="i-label">Vaše ime</span><span class="i-value">Marija</span></div>
+              <div class="info-row"><span class="i-label">Partner</span><span class="i-value">Petar</span></div>
+              <div class="info-row"><span class="i-label">Datum venčanja</span><span class="i-value">15. maj 2026.</span></div>
+              <div class="info-row link"><span class="i-label">Uredi profil</span><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+            </div>
+            <div class="logout-wrap">
+              <div class="btn logout"><svg viewBox="0 0 24 24"><path d="M16 17l5-5-5-5M21 12H9M13 21H6a2 2 0 01-2-2V5a2 2 0 012-2h7"/></svg>Odjavi se</div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/></svg><span class="nav-label">Početna</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.3-8.8C1.2 8 2.4 5 5.5 4.4 8 4 10 5 12 7.5 14 5 16 4 18.5 4.4 21.6 5 22.8 8 21.3 11.2 19 15.6 12 20 12 20z"/></svg><span class="nav-label">Omiljeno</span></div>
+              <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="9" cy="14" r="5"/><circle cx="15" cy="10" r="5"/></svg><span class="nav-label">Venčanje</span></div>
+              <div class="nav-item active"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg><span class="nav-label">Profil</span></div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+        <div class="phone-caption">
+          <p class="name">Profile</p>
+          <p class="desc">Account basics and logout — exactly what the brief scoped, nothing more.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="note">
+      Adjusted after a look at Adriaticum Events' site and Instagram: their brand runs mostly white space with a thin-lined serif wordmark, and gold/blush show up as accents in the photography rather than filled UI blocks — so Home and the category list moved to photo-tile cards with a hairline gold rule instead of solid-color panels. Favorites, My Wedding, and Profile are new here — the bottom nav grew from 3 tabs to 4 to fit "My Wedding" in. System fonts stand in for Playfair Display / Inter here since the artifact sandbox can't load Google Fonts — the real app will pull both via <code>expo-font</code> and this exact palette will become the React Native Paper theme. Everything above is static: no taps, just the reference to build against.
+    </footer>
+  </div>
+</div>
+
+</body></html>
