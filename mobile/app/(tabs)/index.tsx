@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { apiGet } from "@/services/api";
 import { Category } from "@/types/category";
 import { Palette } from "@/constants/paper-theme";
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from "expo-router";
 
 const tileGradients = [
   ['#EBC0B6', '#F5E9DC'], // blush rose
@@ -61,18 +62,20 @@ export default function HomeScreen() {
           </View>
         }
         renderItem={({ item, index }) => (
+          <Pressable style={{ flex: 1 }} onPress={() => router.push({ pathname: '/vendor-list/[id]', params: { id: item.id, name: item.name }})}>
           <LinearGradient
-            colors={tileGradients[index % tileGradients.length]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.tile}
+          colors={tileGradients[index % tileGradients.length]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.tile}
           >
             <LinearGradient
               colors={['transparent', 'rgba(54,47,39,0.4)']}
               style={styles.scrim}
-            />
+              />
             <Text style={styles.tileLabel}>{item.name}</Text>
           </LinearGradient>
+          </Pressable>
         )}
       />
     </SafeAreaView>
