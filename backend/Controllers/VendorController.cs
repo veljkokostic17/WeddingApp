@@ -1,11 +1,10 @@
 using backend.Data;
 using backend.Dtos.Vendor;
+using backend.Helpers;
 using backend.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client.Extensions.Msal;
-
 namespace backend.Controllers
 {
     [ApiController]
@@ -20,16 +19,20 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery] int? categoryId)
         {
-            var vendors = _context.Vendors.Include(v => v.Category).Include(v => v.Photos).Include(v => v.UnavailableDates).ToList().Select(v => v.ToVendorDto());
 
-            return Ok(vendors);
+            var query = _context.Vendors.WithDetails();
+
+            if (categoryId.HasValue)
+                query = query.Where(v => v.CategoryId == categoryId.Value);
+
+            return Ok(query.ToList().Select(v => v.ToVendorDto()));
         }
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute] int id)
         {
-            var vendor = _context.Vendors.Include(v => v.Category).Include(v => v.Photos).Include(v => v.UnavailableDates).FirstOrDefault(v => v.Id == id);
+            var vendor = _context.Vendors.WithDetails().FirstOrDefault(v => v.Id == id);
 
             if (vendor == null)
             {
@@ -48,7 +51,7 @@ namespace backend.Controllers
             _context.SaveChanges();
 
             var created = _context.Vendors
-                .Include(v => v.Category).Include(v => v.Photos).Include(v => v.UnavailableDates)
+                .WithDetails()
                 .FirstOrDefault(v => v.Id == vendorModel.Id);
 
             return CreatedAtAction(nameof(GetById), new { id = vendorModel.Id }, created!.ToVendorDto());
@@ -78,7 +81,7 @@ namespace backend.Controllers
             _context.SaveChanges();
 
              var created = _context.Vendors
-                .Include(v => v.Category).Include(v => v.Photos).Include(v => v.UnavailableDates)
+                .WithDetails()
                 .FirstOrDefault(v => v.Id == vendorModel.Id);
 
             return Ok (created!.ToVendorDto());
