@@ -1,39 +1,13 @@
-import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { apiGet } from "@/services/api";
+import { useFetch } from "@/hooks/use-fetch";
 import { Category } from "@/types/category";
-import { Palette } from "@/constants/paper-theme";
+import { Palette, tileGradients } from "@/constants/paper-theme";
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from "expo-router";
 
-const tileGradients = [
-  ['#EBC0B6', '#F5E9DC'], // blush rose
-  ['#C98B82', '#EAD0C6'], // dusty rose (was charcoal — deeper, but still pink)
-  ['#E1C598', '#F5ECD9'], // soft champagne
-  ['#EAC7C2', '#F7EFE6'], // light pink
-  ['#F3EAD9', '#E1C598'], // pale champagne
-] as const;
-
 export default function HomeScreen() {
-  const [category, setCategory] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const result = await apiGet<Category[]>('/category');
-        setCategory(result);
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setLoading (false);
-      }
-    };
-    loadCategories();
-  }, []);
+  const { data: categories, loading, error } = useFetch<Category[]>('/category');
 
   if (loading) return <View style={styles.center}><ActivityIndicator /></View>
   if (error) return <View style={styles.center}><Text>{error}</Text></View>
@@ -41,7 +15,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
       <FlatList
-        data={category}
+        data={categories ?? []}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         contentContainerStyle={styles.grid}
@@ -62,7 +36,7 @@ export default function HomeScreen() {
           </View>
         }
         renderItem={({ item, index }) => (
-          <Pressable style={{ flex: 1 }} onPress={() => router.push({ pathname: '/vendor-list/[id]', params: { id: item.id, name: item.name }})}>
+          <Pressable style={{ flex: 1 }} onPress={() => router.push({ pathname: '/category/[id]', params: { id: item.id, name: item.name }})}>
           <LinearGradient
           colors={tileGradients[index % tileGradients.length]}
           start={{ x: 0, y: 0 }}

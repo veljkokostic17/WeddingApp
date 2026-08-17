@@ -8,8 +8,19 @@ export const Palette = {
   gold: "#B8935A",
   deepGold: "#8C6A3B",
   blush: "#E3B8B0",
+  blushDeep: "#C98B82",
   line: "#E8DFCF",
 };
+
+// Photo-placeholder gradients, cycled by index. All fade a warm tone into light
+// cream — solid brand colors read as muddy brown on their own.
+export const tileGradients = [
+  ["#EBC0B6", "#F5E9DC"], // blush rose
+  ["#C98B82", "#EAD0C6"], // dusty rose
+  ["#E1C598", "#F5ECD9"], // soft champagne
+  ["#EAC7C2", "#F7EFE6"], // light pink
+  ["#F3EAD9", "#E1C598"], // pale champagne
+] as const;
 
 const baseFonts = configureFonts({
   config: { fontFamily: "Inter_400Regular" },

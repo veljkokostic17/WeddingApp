@@ -3,16 +3,16 @@ import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Palette } from '@/constants/paper-theme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        // Light-only design — the tab bar does not follow the phone's dark mode.
+        tabBarActiveTintColor: Palette.deepGold,
+        tabBarInactiveTintColor: Palette.charcoalSoft,
+        tabBarStyle: { backgroundColor: Palette.cream, borderTopColor: Palette.line },
         headerShown: false,
         tabBarButton: HapticTab,
       }}>

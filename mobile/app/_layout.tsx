@@ -53,6 +53,7 @@ export default function RootLayout() {
       <ThemeProvider value={navTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="category/[id]" options={{ headerShown: false }} />
           <Stack.Screen
             name="modal"
             options={{ presentation: "modal", title: "Modal" }}
