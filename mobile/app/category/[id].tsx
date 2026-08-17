@@ -21,8 +21,8 @@ export default function VendorListScreen () {
   <SafeAreaView style={styles.screen} edges={['top']}>
     <View style={styles.header}>
       <View style={styles.headerTop}>
-        <Pressable onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="chevron-back" size={22} color={Palette.charcoal} />
+        <Pressable style={styles.backBtn} onPress={() => router.back()} hitSlop={8}>
+          <Ionicons name="chevron-back" size={21} color={Palette.charcoal} />
         </Pressable>
         <Text style={styles.headerTitle}>{name}</Text>
       </View>
@@ -35,7 +35,7 @@ export default function VendorListScreen () {
       contentContainerStyle={styles.list}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       renderItem={({ item, index }) => (
-        <Pressable onPress={() => router.push({pathname: /vendor/[id], params: {id: item.id}})}>
+        <Pressable onPress={() => router.push({pathname: '/vendor/[id]', params: {id: item.id}})}>
         <View style={styles.card}>
           <View style={styles.photo}>
             {item.photos.length > 0 ? (
@@ -80,7 +80,14 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Palette.cream },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Palette.cream },
   header: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 12 },
-  headerTop: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', gap: 6, height: 40 },
+  backBtn: {
+    width: 40,
+    height: 40,
+    marginLeft: -6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   headerTitle: {
     fontFamily: 'PlayfairDisplay_600SemiBold',
     fontSize: 21,
@@ -91,7 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 11.5,
     color: Palette.charcoalSoft,
     marginTop: 2,
-    marginLeft: 28,
+    marginLeft: 40,
   },
   list: { paddingHorizontal: 16, paddingBottom: 16 },
   separator: { height: 1, backgroundColor: Palette.line },
