@@ -1,4 +1,5 @@
 import { Palette } from "@/constants/paper-theme";
+import { Type } from "@/constants/typography";
 import { VendorUnavailableDate } from "@/types/vendor";
 import { useState } from "react";
 import { Dimensions, StyleSheet, Text, View, Pressable } from "react-native";
@@ -43,7 +44,7 @@ export function VendorCalendar({ unavailableDates }: Props) {
   return (
     <View style={styles.calWrap}>
       <View style={styles.calHead}>
-        <Text style={styles.calLabel}>
+        <Text style={Type.sectionLabel}>
           Dostupnost · {months[month]} {year}
         </Text>
 
@@ -125,13 +126,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 10,
-  },
-  calLabel: {
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 11.5,
-    letterSpacing: 1.4,
-    textTransform: "uppercase",
-    color: Palette.charcoalSoft,
   },
   calNav: { flexDirection: "row", gap: 6 },
   calNavBtn: {

@@ -1,4 +1,5 @@
 import { Palette, tileGradients } from "@/constants/paper-theme";
+import { Type } from "@/constants/typography";
 import { Vendor } from "@/types/vendor";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -51,17 +52,17 @@ export function VendorCard({ vendor, index }: Props) {
             <Ionicons name="heart-outline" size={17} color={Palette.deepGold} />
           </Pressable>
 
-          <Text style={styles.vName} numberOfLines={1}>
+          <Text style={[Type.cardTitle, styles.vName]} numberOfLines={1}>
             {vendor.name}
           </Text>
         </View>
 
         <View style={styles.metaRow}>
-          <Text style={styles.vAddr} numberOfLines={1}>
+          <Text style={[Type.meta, styles.vAddr]} numberOfLines={1}>
             {vendor.address}
           </Text>
           {vendor.capacity != null && vendor.capacity > 0 && (
-            <Text style={styles.vCap}>Do {vendor.capacity} gostiju</Text>
+            <Text style={Type.accent}>Do {vendor.capacity} gostiju</Text>
           )}
         </View>
       </View>
@@ -96,31 +97,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  vName: {
-    color: "#fff",
-    fontFamily: "PlayfairDisplay_600SemiBold",
-    fontSize: 18,
-    paddingHorizontal: 12,
-    paddingBottom: 9,
-    textShadowColor: "rgba(0,0,0,0.25)",
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
-  },
+  vName: { paddingHorizontal: 12, paddingBottom: 9 },
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "baseline",
     gap: 8,
   },
-  vAddr: {
-    flex: 1,
-    fontFamily: "Inter_400Regular",
-    fontSize: 14,
-    color: Palette.charcoalSoft,
-  },
-  vCap: {
-    fontFamily: "Inter_600SemiBold",
-    fontSize: 13,
-    color: Palette.deepGold,
-  },
+  vAddr: { flex: 1 },
 });
