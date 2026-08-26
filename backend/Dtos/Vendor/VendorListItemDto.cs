@@ -1,0 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace backend.Dtos.Vendor
+{
+    public class VendorListItemDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Address { get; set; }
+        public int? Capacity { get; set; }
+        public string? CoverPhotoUrl { get; set; }        
+    }
+}

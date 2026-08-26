@@ -25,6 +25,18 @@ namespace backend.Mappers
                 UnavailableDates = vendorModel.UnavailableDates.Select(p => p.ToVendorUnavailableDateDto()).ToList()
             };
         }
+
+         public static VendorListItemDto ToVendorListItemDto (this Vendor vendorModel)
+        {
+            return new VendorListItemDto
+            {
+                Id = vendorModel.Id,
+                Name = vendorModel.Name,               
+                Address = vendorModel.Address,
+                Capacity = vendorModel.Capacity,
+                CoverPhotoUrl = vendorModel.Photos.FirstOrDefault()?.ImageUrl
+            };
+        }
         public static Vendor ToVendorFromCreateDTO (this CreateVendorDto vendorDto)
         {
             return new Vendor
@@ -77,6 +89,8 @@ namespace backend.Mappers
                 VendorId = vendorId
             };
         }
+
+
 
     }
 }

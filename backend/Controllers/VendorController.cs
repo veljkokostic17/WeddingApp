@@ -31,6 +31,24 @@ namespace backend.Controllers
 
             return Ok(vendors.Select(v => v.ToVendorDto()));
         }
+
+        // Slim payload for the mobile category-list screen — name/address/capacity/cover photo only.
+        [HttpGet("list")]
+        public async Task<IActionResult> GetList([FromQuery] int? categoryId)
+        {
+            var query = _context.Vendors
+                .AsNoTracking()
+                .Include(v => v.Photos.OrderBy(p => p.SortOrder))
+                .Where(v => v.IsActive);
+
+            if (categoryId.HasValue)
+                query = query.Where(v => v.CategoryId == categoryId.Value);
+
+            var vendors = await query.ToListAsync();
+
+            return Ok(vendors.Select(v => v.ToVendorListItemDto()));
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
