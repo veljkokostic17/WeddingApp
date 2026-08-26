@@ -14,7 +14,7 @@ namespace backend.Dtos.Vendor
         public string? Email {get; set;}
         public string? InstagramUrl {get ;set;}
         public int CategoryId {get; set;}
-        public bool IsActive {get; set;}
+        public bool IsActive {get; set;} = true;
         public int? Capacity {get; set;}
         public string? TableSize {get; set;}
     }

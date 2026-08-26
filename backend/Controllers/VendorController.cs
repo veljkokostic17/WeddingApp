@@ -19,20 +19,22 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll([FromQuery] int? categoryId)
+        public async Task<IActionResult> GetAll([FromQuery] int? categoryId)
         {
 
-            var query = _context.Vendors.WithDetails();
+            var query = _context.Vendors.AsNoTracking().WithDetails().Where(v => v.IsActive);
 
             if (categoryId.HasValue)
                 query = query.Where(v => v.CategoryId == categoryId.Value);
 
-            return Ok(query.ToList().Select(v => v.ToVendorDto()));
+            var vendors = await query.ToListAsync();
+
+            return Ok(vendors.Select(v => v.ToVendorDto()));
         }
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var vendor = _context.Vendors.WithDetails().FirstOrDefault(v => v.Id == id);
+            var vendor = await _context.Vendors.AsNoTracking().WithDetails().Where(v => v.IsActive).FirstOrDefaultAsync(v => v.Id == id);
 
             if (vendor == null)
             {
@@ -44,23 +46,23 @@ namespace backend.Controllers
             }
         }
         [HttpPost]
-        public IActionResult Create([FromBody] CreateVendorDto vendorDto)
+        public async Task<IActionResult> Create([FromBody] CreateVendorDto vendorDto)
         {
             var vendorModel = vendorDto.ToVendorFromCreateDTO();
             _context.Vendors.Add(vendorModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            var created = _context.Vendors
+            var created = await _context.Vendors
                 .WithDetails()
-                .FirstOrDefault(v => v.Id == vendorModel.Id);
+                .FirstOrDefaultAsync(v => v.Id == vendorModel.Id);
 
             return CreatedAtAction(nameof(GetById), new { id = vendorModel.Id }, created!.ToVendorDto());
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateVendorDto updateDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateVendorDto updateDto)
         {
-            var vendorModel = _context.Vendors.FirstOrDefault(u => u.Id == id);
+            var vendorModel = await _context.Vendors.FirstOrDefaultAsync(u => u.Id == id);
 
             if (vendorModel == null)
             {
@@ -78,18 +80,18 @@ namespace backend.Controllers
             vendorModel.Capacity = updateDto.Capacity;
             vendorModel.TableSize = updateDto.TableSize;   
             
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-             var created = _context.Vendors
+             var created = await _context.Vendors
                 .WithDetails()
-                .FirstOrDefault(v => v.Id == vendorModel.Id);
+                .FirstOrDefaultAsync(v => v.Id == vendorModel.Id);
 
             return Ok (created!.ToVendorDto());
         }
         [HttpDelete("{id}")]
-        public IActionResult Delete ([FromRoute] int id)
+        public async Task<IActionResult> Delete ([FromRoute] int id)
         {
-            var vendorModel = _context.Vendors.FirstOrDefault(u => u.Id == id);
+            var vendorModel = await _context.Vendors.FirstOrDefaultAsync(u => u.Id == id);
 
             if (vendorModel == null)
             {
@@ -97,7 +99,7 @@ namespace backend.Controllers
             }
 
             _context.Vendors.Remove(vendorModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
             
@@ -106,19 +108,19 @@ namespace backend.Controllers
         //PHOTO REGULATION 
         [HttpPost("{vendorId}/photos")]
 
-        public IActionResult AddPhoto ([FromRoute] int vendorId, [FromBody] CreateVendorPhotoDto photoDto)
+        public async Task<IActionResult> AddPhoto ([FromRoute] int vendorId, [FromBody] CreateVendorPhotoDto photoDto)
         {
             var photoModel = photoDto.ToVendorPhotoFromCreateDto(vendorId);
             _context.Photos.Add(photoModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById), new {id = vendorId}, photoModel.ToVendorPhotoDto());
         }
 
         [HttpDelete("{vendorId}/photos/{photoId}")]
-        public IActionResult DeletePhoto ([FromRoute] int photoId)
+        public async Task<IActionResult> DeletePhoto ([FromRoute] int photoId)
         {
-            var photoModel = _context.Photos.FirstOrDefault(p => p.Id == photoId);
+            var photoModel = await _context.Photos.FirstOrDefaultAsync(p => p.Id == photoId);
 
             if (photoModel == null)
             {
@@ -126,25 +128,25 @@ namespace backend.Controllers
             }
             
             _context.Photos.Remove(photoModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
         // UNAVAILABLE DATES REGULATION\
         [HttpPost("{vendorId}/dates")]
-        public IActionResult AddUnavailableDate ([FromRoute] int vendorId, [FromBody] CreateVendorUnavailableDateDto dateDto)
+        public async Task<IActionResult> AddUnavailableDate ([FromRoute] int vendorId, [FromBody] CreateVendorUnavailableDateDto dateDto)
         {
             var dateModel = dateDto.ToVendorUnavailableDateFromCreateDto(vendorId);
             _context.VendorUnavailableDates.Add(dateModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction (nameof(GetById), new {id = vendorId}, dateModel.ToVendorUnavailableDateDto());
         }
 
         [HttpDelete("{vendorId}/dates/{dateId}")]
-        public IActionResult DeleteUnavailableDate ([FromRoute] int dateId)
+        public async Task<IActionResult> DeleteUnavailableDate ([FromRoute] int dateId)
         {
-            var dateModel = _context.VendorUnavailableDates.FirstOrDefault(v => v.Id == dateId);
+            var dateModel = await _context.VendorUnavailableDates.FirstOrDefaultAsync(v => v.Id == dateId);
 
             if (dateModel == null)
             {
@@ -152,7 +154,7 @@ namespace backend.Controllers
             }
 
             _context.VendorUnavailableDates.Remove(dateModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

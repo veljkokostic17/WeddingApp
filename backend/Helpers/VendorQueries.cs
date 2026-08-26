@@ -12,7 +12,7 @@ namespace backend.Helpers
         public static IQueryable<Vendor> WithDetails (this IQueryable<Vendor> query) =>
             query
                 .Include(v => v.Category)
-                .Include(v => v.Photos)
+                .Include(v => v.Photos.OrderBy(p => p.SortOrder))
                 .Include(v => v.UnavailableDates);
     }
 }
