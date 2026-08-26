@@ -29,25 +29,26 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var favorties = _context.Favorites
+            var favorites = await _context.Favorites
                 .Include(f => f.Vendor)
                 .Where(f => f.UserId == userId)
-                .ToList()
-                .Select(f => f.ToFavoriteDto());
+                .ToListAsync();
 
-            return Ok(favorties);
+            var favoriteDtos = favorites.Select(f => f.ToFavoriteDto());
+
+            return Ok(favoriteDtos);
         }
 
         [HttpPost("{vendorId}")]
-        public IActionResult Add([FromRoute] int vendorId)
+        public async Task<IActionResult> Add([FromRoute] int vendorId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var alreadyFavorited = _context.Favorites.Any(f => f.UserId == userId && f.VendorId == vendorId);
+            var alreadyFavorited = await _context.Favorites.AnyAsync(f => f.UserId == userId && f.VendorId == vendorId);
 
             if (alreadyFavorited)
             {
@@ -61,19 +62,19 @@ namespace backend.Controllers
             };
 
             _context.Favorites.Add(favoriteModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            var created = _context.Favorites.Include(f => f.Vendor).FirstOrDefault(f => f.Id == favoriteModel.Id);
+            var created = await _context.Favorites.Include(f => f.Vendor).FirstOrDefaultAsync(f => f.Id == favoriteModel.Id);
 
             return CreatedAtAction(nameof(GetAll), created!.ToFavoriteDto());
         }
 
         [HttpDelete("{vendorId}")]
-        public IActionResult Remove([FromRoute] int vendorId)
+        public async Task<IActionResult> Remove([FromRoute] int vendorId)
         {
             var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var favoriteModel = _context.Favorites.FirstOrDefault(f => f.UserId == user && f.VendorId == vendorId);
+            var favoriteModel = await _context.Favorites.FirstOrDefaultAsync(f => f.UserId == user && f.VendorId == vendorId);
 
             if (favoriteModel == null)
             {
@@ -81,54 +82,51 @@ namespace backend.Controllers
             }
 
             _context.Favorites.Remove(favoriteModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
         [HttpPut("{vendorId}/choose")]
-        public IActionResult ChosenWeddingVendorSelect([FromRoute] int vendorId)
+        public async Task<IActionResult> ChosenWeddingVendorSelect([FromRoute] int vendorId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var target = _context.Favorites
-                .Include(f => f.Vendor)
-                .FirstOrDefault(f => f.UserId == userId && f.VendorId == vendorId);
-
-            var vendorExists = _context.Vendors.Any(v => v.Id == vendorId);
-            if (!vendorExists)
+            var vendor = await _context.Vendors.FirstOrDefaultAsync(v => v.Id == vendorId);
+           
+            if (vendor == null)
             {
-                return NotFound("Vendor does not exist."); 
+                return NotFound("Vendor does not exist");
             }
 
+             var target = await _context.Favorites
+                        .FirstOrDefaultAsync(f => f.UserId == userId && f.VendorId == vendorId); 
+        
             if (target == null)
             {
-                var newFavorite = new Favorite { UserId = userId!, VendorId = vendorId };
-                _context.Favorites.Add(newFavorite);
-                _context.SaveChanges();
-
-                target = _context.Favorites
-                        .Include(f => f.Vendor).
-                        FirstOrDefault(f => f.UserId == userId && f.VendorId == vendorId);
+                target = new Favorite { UserId = userId!, VendorId = vendorId };
+                    _context.Favorites.Add(target);
             }
 
-            var siblings = _context.Favorites
-                .Include(f => f.Vendor)
+
+
+            var siblings = await _context.Favorites
                 .Where(f => f.UserId == userId
-                            && f.Vendor.CategoryId == target!.Vendor.CategoryId
+                            && f.Vendor.CategoryId == vendor.CategoryId
                             && f.VendorId != vendorId)
-                .ToList();
+                .ToListAsync();
+
 
             foreach (var fav in siblings)
             {
                 fav.IsChosen = false;
             }
 
-            target!.IsChosen = true;
+            target.IsChosen = true;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return Ok (target.ToFavoriteDto());
+            return Ok(target.ToFavoriteDto());
         }
     }
-}
+ }

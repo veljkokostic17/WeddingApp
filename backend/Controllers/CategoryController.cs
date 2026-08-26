@@ -25,17 +25,18 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var categories = _context.Categories.ToList().Select(c => c.ToCategoryDto());
+            var categories = await _context.Categories.ToListAsync();
+            var categoryDtos = categories.Select(c => c.ToCategoryDto());
 
-            return Ok (categories);
+            return Ok (categoryDtos);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById ([FromRoute] int id)
+        public async Task<IActionResult> GetById ([FromRoute] int id)
         {
-            var category = _context.Categories.FirstOrDefault(u => u.Id == id);
+            var category = await _context.Categories.FirstOrDefaultAsync(u => u.Id == id);
 
             if (category == null)
             {
@@ -46,20 +47,20 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create ([FromBody] CreateCategoryDto categoryDto)
+        public async Task<IActionResult> Create ([FromBody] CreateCategoryDto categoryDto)
         {
             var categoryModel = categoryDto.ToCategoryFromCreateDto();
 
             _context.Categories.Add(categoryModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById), new {id = categoryModel.Id}, categoryModel.ToCategoryDto());
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update ([FromRoute] int id, [FromBody] UpdateCategoryDto categoryDto)
+        public async Task<IActionResult> Update ([FromRoute] int id, [FromBody] UpdateCategoryDto categoryDto)
         {
-            var categoryModel = _context.Categories.FirstOrDefault(c => c.Id == id);
+            var categoryModel = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
 
             if (categoryModel == null)
             {
@@ -68,14 +69,14 @@ namespace backend.Controllers
 
             categoryModel.Name = categoryDto.Name;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok (categoryModel.ToCategoryDto());
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete ([FromRoute] int id)
+        public async Task<IActionResult> Delete ([FromRoute] int id)
         {
-            var categoryModel = _context.Categories.FirstOrDefault(c => c.Id == id);
+            var categoryModel = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
 
             if (categoryModel == null)
             {
@@ -83,7 +84,7 @@ namespace backend.Controllers
             }
 
             _context.Categories.Remove(categoryModel);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

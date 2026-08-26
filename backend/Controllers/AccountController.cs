@@ -27,40 +27,33 @@ namespace backend.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register ([FromBody] RegisterDto registerDto)
         {
-            try
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var appUser = new AppUser
             {
-                if(!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                UserName = registerDto.Email,
+                Email = registerDto.Email,
+                YourName = registerDto.YourName,
+                YourPartnerName = registerDto.YourPartnerName,
+                WeddingDate = registerDto.WeddingDate,
+                CreatedAt = DateTime.UtcNow
+            };
 
-                var appUser = new AppUser
-                {
-                    UserName = registerDto.Email,
-                    Email = registerDto.Email,
-                    YourName = registerDto.YourName,
-                    YourPartnerName = registerDto.YourPartnerName,
-                    WeddingDate = registerDto.WeddingDate,
-                    CreatedAt = DateTime.UtcNow
-                };
+            var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
-                var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
-
-                if (createdUser.Succeeded)
-                {
-                    return Ok(new NewUserDto
-                    {
-                        Email = appUser.Email,
-                        YourName = appUser.YourName,
-                        Token = _tokenService.CreateToken(appUser)
-                    });
-                } 
-                else
-                {
-                    return BadRequest(createdUser.Errors);
-                }
-
-            } catch (Exception e)
+            if (createdUser.Succeeded)
             {
-                return StatusCode(500, e.Message);
+                return Ok(new NewUserDto
+                {
+                    Email = appUser.Email,
+                    YourName = appUser.YourName,
+                    Token = _tokenService.CreateToken(appUser)
+                });
+            }
+            else
+            {
+                return BadRequest(createdUser.Errors);
             }
         }
         [HttpPost("login")]

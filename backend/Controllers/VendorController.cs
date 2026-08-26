@@ -66,6 +66,13 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateVendorDto vendorDto)
         {
+            var categoryExists = await _context.Categories.AnyAsync(c => c.Id == vendorDto.CategoryId);
+
+            if (!categoryExists)
+            {
+                return BadRequest("Category does not exist.");
+            }
+
             var vendorModel = vendorDto.ToVendorFromCreateDTO();
             _context.Vendors.Add(vendorModel);
             await _context.SaveChangesAsync();
@@ -86,7 +93,14 @@ namespace backend.Controllers
             {
                 return NotFound();
             }
-            
+
+            var categoryExists = await _context.Categories.AnyAsync(c => c.Id == updateDto.CategoryId);
+
+            if (!categoryExists)
+            {
+                return BadRequest("Category does not exist.");
+            }
+
             vendorModel.Name = updateDto.Name;
             vendorModel.Description = updateDto.Description;
             vendorModel.Address = updateDto.Address;
