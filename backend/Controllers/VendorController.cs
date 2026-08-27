@@ -142,6 +142,12 @@ namespace backend.Controllers
 
         public async Task<IActionResult> AddPhoto ([FromRoute] int vendorId, [FromBody] CreateVendorPhotoDto photoDto)
         {
+            var vendor = await _context.Vendors.AnyAsync(u => u.Id == vendorId);
+            if (!vendor)
+            {
+                return NotFound("Vendor does not exist");
+            }
+
             var photoModel = photoDto.ToVendorPhotoFromCreateDto(vendorId);
             _context.Photos.Add(photoModel);
             await _context.SaveChangesAsync();
@@ -168,9 +174,17 @@ namespace backend.Controllers
         [HttpPost("{vendorId}/dates")]
         public async Task<IActionResult> AddUnavailableDate ([FromRoute] int vendorId, [FromBody] CreateVendorUnavailableDateDto dateDto)
         {
+
+            var vendor = await _context.Vendors.AnyAsync(u => u.Id == vendorId);
+            if (!vendor)
+            {
+                return NotFound("Vendor does not exist");
+            }
+
             var dateModel = dateDto.ToVendorUnavailableDateFromCreateDto(vendorId);
             _context.VendorUnavailableDates.Add(dateModel);
             await _context.SaveChangesAsync();
+
 
             return CreatedAtAction (nameof(GetById), new {id = vendorId}, dateModel.ToVendorUnavailableDateDto());
         }
