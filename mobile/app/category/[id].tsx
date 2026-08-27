@@ -1,4 +1,4 @@
-import { Vendor } from "@/types/vendor";
+import { VendorListItem } from "@/types/vendor";
 import { Palette } from "@/constants/paper-theme";
 import { Type, Layout } from "@/constants/typography";
 import { useLocalSearchParams, router } from "expo-router";
@@ -12,7 +12,7 @@ import { VendorCard } from "@/components/vendor-card";
 export default function VendorListScreen () {
   const {id, name} = useLocalSearchParams<{ id: string; name: string}>();
 
-  const { data: vendors, loading, error} = useFetch<Vendor[]>(id ? '/vendor?categoryId=' + id : null);
+  const { data: vendors, loading, error} = useFetch<VendorListItem[]>(id ? '/vendor/list?categoryId=' + id : null);
 
   if (loading) return <View style={Layout.center}><ActivityIndicator /></View>
   if (error) return <View style={Layout.center}><Text>{error}</Text></View>
@@ -37,7 +37,7 @@ export default function VendorListScreen () {
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       ListEmptyComponent={<Text style={styles.empty}>Još nema ponuda u ovoj kategoriji.</Text>}
       renderItem={({ item, index }) => (
-        <VendorCard vendor={item} index={index} />
+        <VendorCard vendorListItem={item} index={index} />
       )}
     />
   </SafeAreaView>

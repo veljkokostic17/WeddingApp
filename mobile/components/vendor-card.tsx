@@ -1,6 +1,6 @@
 import { Palette, tileGradients } from "@/constants/paper-theme";
 import { Type } from "@/constants/typography";
-import { Vendor } from "@/types/vendor";
+import { VendorListItem } from "@/types/vendor";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -8,23 +8,23 @@ import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props = {
-  vendor: Vendor;
+  vendorListItem: VendorListItem;
   /** Position in the list — picks which placeholder gradient to use. */
   index: number;
 };
 
-export function VendorCard({ vendor, index }: Props) {
+export function VendorCard({ vendorListItem, index }: Props) {
   return (
     <Pressable
       onPress={() =>
-        router.push({ pathname: "/vendor/[id]", params: { id: vendor.id } })
+        router.push({ pathname: "/vendor/[id]", params: { id: vendorListItem.id } })
       }
     >
       <View style={styles.card}>
         <View style={styles.photo}>
-          {vendor.photos.length > 0 ? (
+          {vendorListItem.coverPhotoUrl != null ? (
             <Image
-              source={{ uri: vendor.photos[0].imageUrl }}
+              source={{ uri: vendorListItem.coverPhotoUrl }}
               style={StyleSheet.absoluteFill}
               contentFit="cover"
             />
@@ -47,22 +47,22 @@ export function VendorCard({ vendor, index }: Props) {
             style={styles.heartBtn}
             hitSlop={8}
             accessibilityRole="button"
-            accessibilityLabel={"Sačuvaj " + vendor.name + " u omiljene"}
+            accessibilityLabel={"Sačuvaj " + vendorListItem.name + " u omiljene"}
           >
             <Ionicons name="heart-outline" size={17} color={Palette.deepGold} />
           </Pressable>
 
           <Text style={[Type.cardTitle, styles.vName]} numberOfLines={1}>
-            {vendor.name}
+            {vendorListItem.name}
           </Text>
         </View>
 
         <View style={styles.metaRow}>
           <Text style={[Type.meta, styles.vAddr]} numberOfLines={1}>
-            {vendor.address}
+            {vendorListItem.address}
           </Text>
-          {vendor.capacity != null && vendor.capacity > 0 && (
-            <Text style={Type.accent}>Do {vendor.capacity} gostiju</Text>
+          {vendorListItem.capacity != null && vendorListItem.capacity > 0 && (
+            <Text style={Type.accent}>Do {vendorListItem.capacity} gostiju</Text>
           )}
         </View>
       </View>

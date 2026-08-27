@@ -26,3 +26,11 @@ export interface Vendor {
     unavailableDates: VendorUnavailableDate[];
 }
 
+export interface VendorListItem {
+    id: number;
+    name: string;
+    address: string | null;
+    capacity: number | null;
+    coverPhotoUrl: string | null;
+}
+
