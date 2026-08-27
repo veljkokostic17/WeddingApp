@@ -6,6 +6,7 @@ export function useFetch<T>(path: string | null) {
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [reloadKey, setReloadKey] = useState(0);
 
 
     useEffect(() => {
@@ -34,8 +35,8 @@ export function useFetch<T>(path: string | null) {
 
         return () => { ignore = true; };
 
-    }, [path]);
+    }, [path, reloadKey]);
 
-    return { data, loading, error }
+    return { data, loading, error, refetch: () => setReloadKey(k => k + 1) };
 
 };

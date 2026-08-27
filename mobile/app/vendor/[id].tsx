@@ -17,6 +17,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { VendorCalendar } from "@/components/vendor-calendar";
+import { ErrorView } from "@/components/error-view";
 
 export default function VendorScreen() {
   const insets = useSafeAreaInsets();
@@ -26,6 +27,7 @@ export default function VendorScreen() {
     data: vendor,
     loading,
     error,
+    refetch,
   } = useFetch<Vendor>(id ? "/vendor/" + id : null);
 
   if (loading)
@@ -34,12 +36,9 @@ export default function VendorScreen() {
         <ActivityIndicator />
       </View>
     );
-  if (error)
-    return (
-      <View style={Layout.center}>
-        <Text>{error}</Text>
-      </View>
-    );
+    
+  if (error) return <ErrorView message={error} onRetry={refetch} />;
+
   if (!vendor)
     return (
       <View style={Layout.center}>
@@ -109,15 +108,15 @@ export default function VendorScreen() {
                   size={17}
                   color={Palette.charcoal}
                 />
-                <Text style={[Type.button, styles.btnTextOutline]}>Instagram</Text>
+                <Text style={[Type.button, styles.btnTextOutline]}>
+                  Instagram
+                </Text>
               </Pressable>
             )}
           </View>
         </View>
       </ScrollView>
 
-      {/* Siblings of the ScrollView, not children of the hero — they stay pinned
-          in view while the photo and body scroll underneath. */}
       <Pressable
         style={[styles.heroBtn, styles.heroBtnBack, { top: insets.top + 14 }]}
         onPress={() => router.back()}

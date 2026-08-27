@@ -10,7 +10,7 @@ export async function apiGet<T>(path: string): Promise<T> {
         const response = await fetch(API_BASE_URL + path, { signal: controller.signal });
 
         if (!response.ok) {
-            throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+            throw new Error(`Zahtev neuspešan: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();

@@ -8,21 +8,22 @@ import { ActivityIndicator } from "react-native-paper";
 import { Ionicons } from '@expo/vector-icons'
 import { useFetch } from "@/hooks/use-fetch";
 import { VendorCard } from "@/components/vendor-card";
+import { ErrorView } from "@/components/error-view";
 
 export default function VendorListScreen () {
   const {id, name} = useLocalSearchParams<{ id: string; name: string}>();
 
-  const { data: vendors, loading, error} = useFetch<VendorListItem[]>(id ? '/vendor/list?categoryId=' + id : null);
+  const { data: vendors, loading, error, refetch} = useFetch<VendorListItem[]>(id ? '/vendor/list?categoryId=' + id : null);
 
   if (loading) return <View style={Layout.center}><ActivityIndicator /></View>
-  if (error) return <View style={Layout.center}><Text>{error}</Text></View>
+  if (error) return <ErrorView message={error} onRetry={refetch} />
 
 
    return (
   <SafeAreaView style={Layout.screen} edges={['top']}>
     <View style={styles.header}>
       <View style={styles.headerTop}>
-        <Pressable style={styles.backBtn} onPress={() => router.back()} hitSlop={8}>
+        <Pressable style={styles.backBtn} onPress={() => router.back()} hitSlop={8} accessibilityRole="button" accessibilityLabel="Nazad">
           <Ionicons name="chevron-back" size={21} color={Palette.charcoal} />
         </Pressable>
         <Text style={Type.h1}>{name}</Text>

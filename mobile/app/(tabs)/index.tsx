@@ -6,12 +6,13 @@ import { Palette, tileGradients } from "@/constants/paper-theme";
 import { Type, Layout } from "@/constants/typography";
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from "expo-router";
+import { ErrorView } from "@/components/error-view";
 
 export default function HomeScreen() {
-  const { data: categories, loading, error } = useFetch<Category[]>('/category');
+  const { data: categories, loading, error, refetch } = useFetch<Category[]>('/category');
 
   if (loading) return <View style={Layout.center}><ActivityIndicator /></View>
-  if (error) return <View style={Layout.center}><Text>{error}</Text></View>
+  if (error) return <ErrorView message={error} onRetry={refetch} />
 
   return (
     <SafeAreaView style={Layout.screen} edges={['top']}>
