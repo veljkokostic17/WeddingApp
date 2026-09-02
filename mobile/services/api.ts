@@ -33,6 +33,8 @@ async function request<T>(
       );
     }
 
+    if (response.status === 204) return undefined as T;
+
     const data = await response.json();
     return data as T;
   } catch (e) {

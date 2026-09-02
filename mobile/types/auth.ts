@@ -16,3 +16,10 @@ export interface NewUser {
   token: string;
   yourName: string;
 }
+
+export interface CurrentUser {
+  email: string;
+  yourName: string;
+  yourPartnerName: string;
+  weddingDate: string;
+}
