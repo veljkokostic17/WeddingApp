@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using backend.Dtos.Account;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace backend.Controllers
 {
@@ -25,9 +28,9 @@ namespace backend.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register ([FromBody] RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var appUser = new AppUser
@@ -57,9 +60,9 @@ namespace backend.Controllers
             }
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login ([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-           if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var appUser = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -68,21 +71,45 @@ namespace backend.Controllers
             {
                 return Unauthorized("Invalid email or password.");
             }
-            
+
             var passwordCorrect = await _userManager.CheckPasswordAsync(appUser, loginDto.Password);
 
             if (!passwordCorrect)
             {
-                return Unauthorized ("Invalid email or password.");
+                return Unauthorized("Invalid email or password.");
             }
 
-            return Ok (new NewUserDto
+            return Ok(new NewUserDto
             {
                 Email = appUser.Email,
                 YourName = appUser.YourName,
                 Token = _tokenService.CreateToken(appUser)
             });
         }
-        
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> Me()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Unauthorized();
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new CurrentUserDto
+            {
+                Email = user.Email!,
+                YourName = user.YourName,
+                YourPartnerName = user.YourPartnerName,
+                WeddingDate = user.WeddingDate
+            });
+
+        }
+
     }
 }
