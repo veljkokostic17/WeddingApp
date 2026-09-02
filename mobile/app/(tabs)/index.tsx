@@ -1,21 +1,38 @@
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useFetch } from "@/hooks/use-fetch";
 import { Category } from "@/types/category";
 import { Palette, tileGradients } from "@/constants/paper-theme";
 import { Type, Layout } from "@/constants/typography";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { ErrorView } from "@/components/error-view";
 
 export default function HomeScreen() {
-  const { data: categories, loading, error, refetch } = useFetch<Category[]>('/category');
+  const {
+    data: categories,
+    loading,
+    error,
+    refetch,
+  } = useFetch<Category[]>("/category");
 
-  if (loading) return <View style={Layout.center}><ActivityIndicator /></View>
-  if (error) return <ErrorView message={error} onRetry={refetch} />
+  if (loading)
+    return (
+      <View style={Layout.center}>
+        <ActivityIndicator />
+      </View>
+    );
+  if (error) return <ErrorView message={error} onRetry={refetch} />;
 
   return (
-    <SafeAreaView style={Layout.screen} edges={['top']}>
+    <SafeAreaView style={Layout.screen} edges={["top"]}>
       <FlatList
         data={categories ?? []}
         keyExtractor={(item) => item.id.toString()}
@@ -26,7 +43,9 @@ export default function HomeScreen() {
           <View>
             {/* TODO: names/date/countdown are hardcoded — wire to the logged-in AppUser once mobile auth exists */}
             <View style={styles.hero}>
-              <Text style={[Type.eyebrow, styles.heroEyebrow]}>128 dana do velikog dana</Text>
+              <Text style={[Type.eyebrow, styles.heroEyebrow]}>
+                128 dana do velikog dana
+              </Text>
               <Text style={[Type.display, styles.heroCouple]}>
                 Marija <Text style={styles.heroAmp}>&</Text> Petar
               </Text>
@@ -34,23 +53,33 @@ export default function HomeScreen() {
               <Text style={Type.body}>Venčanje · 15. maj 2026.</Text>
             </View>
             <View style={styles.divider} />
-            <Text style={[Type.sectionLabel, styles.sectionLabel]}>Kategorije</Text>
+            <Text style={[Type.sectionLabel, styles.sectionLabel]}>
+              Kategorije
+            </Text>
           </View>
         }
         renderItem={({ item, index }) => (
-          <Pressable style={{ flex: 1 }} onPress={() => router.push({ pathname: '/category/[id]', params: { id: item.id, name: item.name }})}>
-          <LinearGradient
-          colors={tileGradients[index % tileGradients.length]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.tile}
+          <Pressable
+            style={{ flex: 1 }}
+            onPress={() =>
+              router.push({
+                pathname: "/category/[id]",
+                params: { id: item.id, name: item.name },
+              })
+            }
           >
             <LinearGradient
-              colors={['transparent', 'rgba(54,47,39,0.4)']}
-              style={styles.scrim}
+              colors={tileGradients[index % tileGradients.length]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.tile}
+            >
+              <LinearGradient
+                colors={["transparent", "rgba(54,47,39,0.4)"]}
+                style={styles.scrim}
               />
-            <Text style={Type.tileLabel}>{item.name}</Text>
-          </LinearGradient>
+              <Text style={Type.tileLabel}>{item.name}</Text>
+            </LinearGradient>
           </Pressable>
         )}
       />
@@ -64,7 +93,7 @@ const styles = StyleSheet.create({
   heroEyebrow: { marginBottom: 10 },
   heroCouple: { marginBottom: 10 },
   heroAmp: {
-    fontFamily: 'Inter_500Medium',
+    fontFamily: "Inter_500Medium",
   },
   heroRule: {
     width: 34,
@@ -84,15 +113,14 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 14,
     padding: 12,
-    justifyContent: 'flex-end',
-    overflow: 'hidden',
+    justifyContent: "flex-end",
+    overflow: "hidden",
   },
   scrim: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     bottom: 0,
-    height: '45%',
+    height: "45%",
   },
 });
-

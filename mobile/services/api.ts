@@ -1,26 +1,62 @@
 import { API_BASE_URL } from "@/constants/api";
 
 const TIMEOUT_MS = 10000;
+let authToken: string | null = null;
 
-export async function apiGet<T>(path: string): Promise<T> {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+export function setAuthToken(token: string | null) {
+  authToken = token;
+}
 
-    try {
-        const response = await fetch(API_BASE_URL + path, { signal: controller.signal });
+async function request<T>(
+  method: string,
+  path: string,
+  body?: unknown,
+): Promise<T> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
-        if (!response.ok) {
-            throw new Error(`Zahtev neuspešan: ${response.status} ${response.statusText}`);
-        }
+  const headers: Record<string, string> = {};
+  if (body != null) headers["Content-Type"] = "application/json";
+  if (authToken != null) headers["Authorization"] = `Bearer ${authToken}`;
 
-        const data = await response.json();
-        return data as T;
-    } catch (e) {
-        if (e instanceof Error && e.name === "AbortError") {
-            throw new Error("Greška sa serverom. Proveri internet i pokušaj ponovo.");
-        }
-        throw e;
-    } finally {
-        clearTimeout(timer);
+  try {
+    const response = await fetch(API_BASE_URL + path, {
+      method,
+      headers,
+      body: body != null ? JSON.stringify(body) : null,
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Zahtev neuspešan: ${response.status} ${response.statusText}`,
+      );
     }
+
+    const data = await response.json();
+    return data as T;
+  } catch (e) {
+    if (e instanceof Error && e.name === "AbortError") {
+      throw new Error("Greška sa serverom. Proveri internet i pokušaj ponovo.");
+    }
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export function apiGet<T>(path: string) {
+  return request<T>("GET", path);
+}
+
+export function apiPost<T>(path: string, body?: unknown) {
+  return request<T>("POST", path, body);
+}
+
+export function apiPut<T>(path: string, body?: unknown) {
+  return request<T>("PUT", path, body);
+}
+
+export function apiDelete(path: string): Promise<void> {
+  return request<void>("DELETE", path);
 }
