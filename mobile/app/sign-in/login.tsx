@@ -1,5 +1,5 @@
 import { useAuth } from "@/context/auth-context";
-import { ApiError } from "@/services/api";
+import { ApiError } from "@/services/api-error";
 import { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";

@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 
-import { setAuthToken } from "@/services/api";
+import { setAuthToken, setOnUnauthorized } from "@/services/api";
 import {
   login as loginApi,
   register as registerApi,
@@ -68,6 +68,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     restoreSession();
+  }, []);
+
+  //Token expired mid usage case
+  useEffect(() => {
+    setOnUnauthorized(() => {
+      void logout();
+    });
+    return () => setOnUnauthorized(null);
   }, []);
 
   return (

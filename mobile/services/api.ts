@@ -1,26 +1,16 @@
 import { API_BASE_URL } from "@/constants/api";
+import { ApiError } from "./api-error";
 
 const TIMEOUT_MS = 10000;
-let authToken: string | null = null;
 
+let authToken: string | null = null;
 export function setAuthToken(token: string | null) {
   authToken = token;
 }
 
-/**
- * A request that reached the server and came back with a failing status.
- * Carries the status so callers can react to it (401 = bad credentials on the
- * login screen, a dead token everywhere else) instead of parsing the message.
- *
- * Note a timeout/network failure is NOT an ApiError — it never got a status.
- */
-export class ApiError extends Error {
-  status: number;
-
-  constructor(message: string, status: number) {
-    super(message);
-    this.status = status;
-  }
+let onUnauthorized: (() => void) | null = null;
+export function setOnUnauthorized(handler: (() => void) | null) {
+  onUnauthorized = handler;
 }
 
 async function request<T>(
@@ -44,6 +34,9 @@ async function request<T>(
     });
 
     if (!response.ok) {
+      //Token expired mid usage case
+      if (response.status === 401 && authToken != null) onUnauthorized?.();
+      //
       throw new ApiError(
         `Zahtev neuspešan: ${response.status} ${response.statusText}`,
         response.status,
@@ -63,6 +56,8 @@ async function request<T>(
     clearTimeout(timer);
   }
 }
+
+// Verbs
 
 export function apiGet<T>(path: string) {
   return request<T>("GET", path);
