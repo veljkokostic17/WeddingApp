@@ -7,6 +7,22 @@ export function setAuthToken(token: string | null) {
   authToken = token;
 }
 
+/**
+ * A request that reached the server and came back with a failing status.
+ * Carries the status so callers can react to it (401 = bad credentials on the
+ * login screen, a dead token everywhere else) instead of parsing the message.
+ *
+ * Note a timeout/network failure is NOT an ApiError — it never got a status.
+ */
+export class ApiError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}
+
 async function request<T>(
   method: string,
   path: string,
@@ -28,8 +44,9 @@ async function request<T>(
     });
 
     if (!response.ok) {
-      throw new Error(
+      throw new ApiError(
         `Zahtev neuspešan: ${response.status} ${response.statusText}`,
+        response.status,
       );
     }
 
