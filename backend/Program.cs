@@ -34,7 +34,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => {
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddIdentity<AppUser, IdentityRole>()
@@ -47,17 +48,18 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-   options.TokenValidationParameters = new TokenValidationParameters
-   {
-     ValidateIssuer = true,
-     ValidIssuer = builder.Configuration["JWT:Issuer"],
-     ValidateAudience = true,
-     ValidAudience = builder.Configuration["JWT:Audience"],
-     ValidateIssuerSigningKey = true,
-     IssuerSigningKey = new SymmetricSecurityKey (
-        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
-     )
-   };
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        ValidateIssuerSigningKey = true,
+        ClockSkew = TimeSpan.Zero,
+        IssuerSigningKey = new SymmetricSecurityKey(
+         System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
+      )
+    };
 });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
