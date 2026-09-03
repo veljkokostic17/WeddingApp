@@ -16,6 +16,7 @@ import {
 } from "@expo-google-fonts/inter";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { AuthProvider, useAuth } from "@/context/auth-context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,8 +27,41 @@ export const unstable_settings = {
 // Light-only design — always use the cream theme, ignore the phone's dark mode.
 const navTheme = {
   ...DefaultTheme,
-  colors: { ...DefaultTheme.colors, background: Palette.cream, card: Palette.cream },
+  colors: {
+    ...DefaultTheme.colors,
+    background: Palette.cream,
+    card: Palette.cream,
+  },
 };
+
+function RootLayoutNav() {
+  const { bootstrapping, user } = useAuth();
+
+  useEffect(() => {
+    if (!bootstrapping) SplashScreen.hideAsync();
+  }, [bootstrapping]);
+
+  if (bootstrapping) {
+    return null;
+  }
+
+  return (
+    <ThemeProvider value={navTheme}>
+      <Stack>
+        <Stack.Protected guard={user != null}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack.Protected>
+        <Stack.Protected guard={user == null}>
+          <Stack.Screen name="sign-in/login" options={{ headerShown: false }} />
+        </Stack.Protected>
+
+        <Stack.Screen name="category/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="vendor/[id]" options={{ headerShown: false }} />
+      </Stack>
+      <StatusBar style="dark" />
+    </ThemeProvider>
+  );
+}
 
 export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({
@@ -38,26 +72,15 @@ export default function RootLayout() {
     Inter_600SemiBold,
   });
 
-  useEffect(() => {
-    if (fontsLoaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, error]);
-
   if (!fontsLoaded && !error) {
     return null;
   }
 
   return (
     <PaperProvider theme={paperTheme}>
-      <ThemeProvider value={navTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="category/[id]" options={{ headerShown: false }} />
-          <Stack.Screen name ="vendor/[id]" options={{ headerShown: false}} />
-        </Stack>
-        <StatusBar style="dark" />
-      </ThemeProvider>
+      <AuthProvider>
+        <RootLayoutNav />
+      </AuthProvider>
     </PaperProvider>
   );
 }
