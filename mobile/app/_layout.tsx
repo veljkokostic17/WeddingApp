@@ -16,6 +16,7 @@ import {
 } from "@expo-google-fonts/inter";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import { AuthProvider, useAuth } from "@/context/auth-context";
 
 SplashScreen.preventAutoHideAsync();
@@ -53,6 +54,10 @@ function RootLayoutNav() {
         </Stack.Protected>
         <Stack.Protected guard={user == null}>
           <Stack.Screen name="sign-in/login" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="sign-in/register"
+            options={{ headerShown: false }}
+          />
         </Stack.Protected>
 
         <Stack.Screen name="category/[id]" options={{ headerShown: false }} />
@@ -77,10 +82,12 @@ export default function RootLayout() {
   }
 
   return (
-    <PaperProvider theme={paperTheme}>
-      <AuthProvider>
-        <RootLayoutNav />
-      </AuthProvider>
-    </PaperProvider>
+    <KeyboardProvider>
+      <PaperProvider theme={paperTheme}>
+        <AuthProvider>
+          <RootLayoutNav />
+        </AuthProvider>
+      </PaperProvider>
+    </KeyboardProvider>
   );
 }

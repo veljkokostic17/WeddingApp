@@ -37,9 +37,13 @@ async function request<T>(
       //Token expired mid usage case
       if (response.status === 401 && authToken != null) onUnauthorized?.();
       //
+      // An error response isn't guaranteed to be JSON, so a failed parse just
+      // means "no body to report" rather than swallowing the real status.
+      const errorBody = await response.json().catch(() => null);
       throw new ApiError(
         `Zahtev neuspešan: ${response.status} ${response.statusText}`,
         response.status,
+        errorBody,
       );
     }
 

@@ -2,10 +2,12 @@ import { useAuth } from "@/context/auth-context";
 import { ApiError } from "@/services/api-error";
 import { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, TextInput } from "react-native-paper";
 import { Palette } from "@/constants/paper-theme";
 import { Type } from "@/constants/typography";
+import { router } from "expo-router";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -40,7 +42,11 @@ export default function Login() {
 
   return (
     <SafeAreaView style={styles.screen} edges={["top", "bottom"]}>
-      <View style={styles.body}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.body}
+        keyboardShouldPersistTaps="handled"
+        bottomOffset={120}
+      >
         <Text style={Type.eyebrow}>VAŠE VENČANJE</Text>
         <Text style={[Type.h1, styles.title]}>Dobrodošli</Text>
         <View style={styles.rule} />
@@ -82,7 +88,15 @@ export default function Login() {
         >
           Prijavi se
         </Button>
-      </View>
+
+        <Button
+          mode="text"
+          onPress={() => router.push("/sign-in/register")}
+          textColor={Palette.deepGold}
+        >
+          Nemate nalog? Registrujte se ovde.
+        </Button>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
@@ -90,8 +104,13 @@ export default function Login() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Palette.cream },
   body: {
-    flex: 1,
-    justifyContent: "center",
+    // flexGrow, not flex — on a contentContainerStyle, flex: 1 pins the content
+    // to the screen height and stops it scrolling when the keyboard is up.
+    flexGrow: 1,
+    // Deliberately NOT justifyContent: "center". Centred content re-centres when
+    // the keyboard adds bottom padding, jumping up by half the keyboard height —
+    // a fixed paddingTop keeps the resting position stable instead.
+    paddingTop: 140,
     paddingHorizontal: 28,
     paddingBottom: 40,
   },
