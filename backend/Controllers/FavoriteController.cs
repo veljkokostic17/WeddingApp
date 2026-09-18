@@ -34,8 +34,10 @@ namespace backend.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var favorites = await _context.Favorites
-                .Include(f => f.Vendor)
+                .Include(f => f.Vendor).ThenInclude(v => v.Photos.OrderBy(p => p.SortOrder))
+                .Include(f => f.Vendor).ThenInclude(v => v.Category)
                 .Where(f => f.UserId == userId)
+                .AsNoTracking()
                 .ToListAsync();
 
             var favoriteDtos = favorites.Select(f => f.ToFavoriteDto());
@@ -64,7 +66,10 @@ namespace backend.Controllers
             _context.Favorites.Add(favoriteModel);
             await _context.SaveChangesAsync();
 
-            var created = await _context.Favorites.Include(f => f.Vendor).FirstOrDefaultAsync(f => f.Id == favoriteModel.Id);
+            var created = await _context.Favorites
+                .Include(f => f.Vendor).ThenInclude(v => v.Photos.OrderBy(p => p.SortOrder))
+                .Include(f => f.Vendor).ThenInclude(v => v.Category)
+                .FirstOrDefaultAsync(f => f.Id == favoriteModel.Id);
 
             return CreatedAtAction(nameof(GetAll), created!.ToFavoriteDto());
         }
@@ -92,7 +97,12 @@ namespace backend.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var vendor = await _context.Vendors.FirstOrDefaultAsync(v => v.Id == vendorId);
+            // Photos/Category are loaded here purely so relationship fixup gives
+            // ToFavoriteDto() what it needs at the end — see the DTO's fields.
+            var vendor = await _context.Vendors
+                .Include(v => v.Photos.OrderBy(p => p.SortOrder))
+                .Include(v => v.Category)
+                .FirstOrDefaultAsync(v => v.Id == vendorId);
            
             if (vendor == null)
             {

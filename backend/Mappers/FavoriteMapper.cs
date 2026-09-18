@@ -16,7 +16,11 @@ namespace backend.Mappers
                 Id = favorite.Id,
                 VendorId = favorite.VendorId,
                 VendorName = favorite.Vendor.Name,
+                Address = favorite.Vendor.Address,
+                // Relies on the caller having included Photos ordered by SortOrder.
+                CoverPhotoUrl = favorite.Vendor.Photos.FirstOrDefault()?.ImageUrl,
                 CategoryId = favorite.Vendor.CategoryId,
+                CategoryName = favorite.Vendor.Category.Name,
                 IsChosen = favorite.IsChosen
             };
         }
