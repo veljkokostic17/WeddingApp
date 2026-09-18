@@ -14,6 +14,26 @@ import { Type, Layout } from "@/constants/typography";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { ErrorView } from "@/components/error-view";
+import { useAuth } from "@/context/auth-context";
+import { months, todayAtMidnight } from "@/constants/dates";
+
+function formatWeddingDate(iso: string) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${d}. ${months[m - 1]} ${y}.`;
+}
+
+function daysUntil(iso: string) {
+  const [y, m, d] = iso.split("-").map(Number);
+  const ms = new Date(y, m - 1, d).getTime() - todayAtMidnight().getTime();
+  return Math.round(ms / 86400000);
+}
+
+function countdownLabel(days: number) {
+  if (days === 0) return "Srećno venčanje!";
+  if (days < 0) return "Veliki dan je iza vas";
+  const noun = days % 10 === 1 && days % 100 !== 11 ? "dan" : "dana";
+  return `${days} ${noun} do vašeg velikog dana`;
+}
 
 export default function HomeScreen() {
   const {
@@ -22,6 +42,8 @@ export default function HomeScreen() {
     error,
     refetch,
   } = useFetch<Category[]>("/category");
+
+  const { user } = useAuth();
 
   if (loading)
     return (
@@ -41,17 +63,21 @@ export default function HomeScreen() {
         columnWrapperStyle={styles.gridRow}
         ListHeaderComponent={
           <View>
-            {/* TODO: names/date/countdown are hardcoded — wire to the logged-in AppUser once mobile auth exists */}
-            <View style={styles.hero}>
-              <Text style={[Type.eyebrow, styles.heroEyebrow]}>
-                128 dana do velikog dana
-              </Text>
-              <Text style={[Type.display, styles.heroCouple]}>
-                Marija <Text style={styles.heroAmp}>&</Text> Petar
-              </Text>
-              <View style={styles.heroRule} />
-              <Text style={Type.body}>Venčanje · 15. maj 2026.</Text>
-            </View>
+            {user != null && (
+              <View style={styles.hero}>
+                <Text style={[Type.eyebrow, styles.heroEyebrow]}>
+                  {countdownLabel(daysUntil(user.weddingDate))}
+                </Text>
+                <Text style={[Type.display, styles.heroCouple]}>
+                  {user.yourName} <Text style={styles.heroAmp}>&</Text>{" "}
+                  {user.yourPartnerName}
+                </Text>
+                <View style={styles.heroRule} />
+                <Text style={Type.body}>
+                  Venčanje · {formatWeddingDate(user.weddingDate)}
+                </Text>
+              </View>
+            )}
             <View style={styles.divider} />
             <Text style={[Type.sectionLabel, styles.sectionLabel]}>
               Kategorije

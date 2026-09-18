@@ -4,34 +4,20 @@ import { VendorUnavailableDate } from "@/types/vendor";
 import { useState } from "react";
 import { Dimensions, StyleSheet, Text, View, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
+import { months, todayAtMidnight } from "@/constants/dates";
 
 type Props = {
   unavailableDates: VendorUnavailableDate[];
 };
 
-const TODAY = new Date();
 const months_ahead = 35;
-const months = [
-  "januar",
-  "februar",
-  "mart",
-  "april",
-  "maj",
-  "jun",
-  "jul",
-  "avgust",
-  "septembar",
-  "oktobar",
-  "novembar",
-  "decembar",
-];
 
 export function VendorCalendar({ unavailableDates }: Props) {
   const [offset, setOffset] = useState(0);
 
   const busy = new Set(unavailableDates.map((d) => d.date));
-  const shown = new Date(TODAY.getFullYear(), TODAY.getMonth() + offset, 1);
+  const today = todayAtMidnight();
+  const shown = new Date(today.getFullYear(), today.getMonth() + offset, 1);
 
   const year = shown.getFullYear();
   const month = shown.getMonth();
@@ -55,17 +41,28 @@ export function VendorCalendar({ unavailableDates }: Props) {
             onPress={() => setOffset((o) => o - 1)}
             hitSlop={6}
           >
-            <Ionicons name="chevron-back" size={17} color={Palette.charcoalSoft} />
+            <Ionicons
+              name="chevron-back"
+              size={17}
+              color={Palette.charcoalSoft}
+            />
           </Pressable>
 
           <Pressable
-            style={[styles.calNavBtn, offset === months_ahead && styles.calNavBtnOff]}
+            style={[
+              styles.calNavBtn,
+              offset === months_ahead && styles.calNavBtnOff,
+            ]}
             disabled={offset === months_ahead}
             onPress={() => setOffset((o) => o + 1)}
             hitSlop={6}
-            >
-              <Ionicons name="chevron-forward" size={17} color={Palette.charcoalSoft} />
-            </Pressable>
+          >
+            <Ionicons
+              name="chevron-forward"
+              size={17}
+              color={Palette.charcoalSoft}
+            />
+          </Pressable>
         </View>
       </View>
 
