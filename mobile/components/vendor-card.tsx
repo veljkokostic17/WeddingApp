@@ -1,7 +1,7 @@
 import { Palette, tileGradients } from "@/constants/paper-theme";
 import { Type } from "@/constants/typography";
 import { VendorListItem } from "@/types/vendor";
-import { Ionicons } from "@expo/vector-icons";
+import { FavoriteHeart } from "./favorite-heart";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -11,9 +11,20 @@ type Props = {
   vendorListItem: VendorListItem;
   /** Position in the list — picks which placeholder gradient to use. */
   index: number;
+  /**
+   * Favorites screen only. Passing a handler opts the card into showing the
+   * "chosen for this category" control; the category list passes neither.
+   */
+  chosen?: boolean;
+  onToggleChosen?: () => void;
 };
 
-export function VendorCard({ vendorListItem, index }: Props) {
+export function VendorCard({
+  vendorListItem,
+  index,
+  chosen = false,
+  onToggleChosen,
+}: Props) {
   return (
     <Pressable
       onPress={() =>
@@ -42,15 +53,12 @@ export function VendorCard({ vendorListItem, index }: Props) {
             style={styles.photoScrim}
           />
 
-          {/* Visual-only for now — favorite toggle needs auth (wired up with login later) */}
-          <Pressable
+          <FavoriteHeart
+            vendorId={vendorListItem.id}
+            vendorName={vendorListItem.name}
+            size={17}
             style={styles.heartBtn}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel={"Sačuvaj " + vendorListItem.name + " u omiljene"}
-          >
-            <Ionicons name="heart-outline" size={17} color={Palette.deepGold} />
-          </Pressable>
+          />
 
           <Text style={[Type.cardTitle, styles.vName]} numberOfLines={1}>
             {vendorListItem.name}
@@ -63,6 +71,24 @@ export function VendorCard({ vendorListItem, index }: Props) {
           </Text>
           {vendorListItem.capacity != null && vendorListItem.capacity > 0 && (
             <Text style={Type.accent}>Do {vendorListItem.capacity} gostiju</Text>
+          )}
+
+          {onToggleChosen != null && (
+            <Pressable
+              onPress={onToggleChosen}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityState={{ selected: chosen }}
+              accessibilityLabel={
+                chosen
+                  ? vendorListItem.name + " je izabran"
+                  : "Izaberi " + vendorListItem.name
+              }
+            >
+              <Text style={[Type.accent, !chosen && styles.chooseInactive]}>
+                {chosen ? "★ Izabrano" : "☆ Izaberi"}
+              </Text>
+            </Pressable>
           )}
         </View>
       </View>
@@ -105,4 +131,5 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   vAddr: { flex: 1 },
+  chooseInactive: { color: Palette.charcoalSoft },
 });

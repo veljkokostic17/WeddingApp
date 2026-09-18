@@ -18,6 +18,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { AuthProvider, useAuth } from "@/context/auth-context";
+import { FavoritesProvider } from "@/context/favorites-context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -85,7 +86,9 @@ export default function RootLayout() {
     <KeyboardProvider>
       <PaperProvider theme={paperTheme}>
         <AuthProvider>
-          <RootLayoutNav />
+          <FavoritesProvider>
+            <RootLayoutNav />
+          </FavoritesProvider>
         </AuthProvider>
       </PaperProvider>
     </KeyboardProvider>

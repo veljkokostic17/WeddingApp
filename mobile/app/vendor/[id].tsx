@@ -18,6 +18,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { VendorCalendar } from "@/components/vendor-calendar";
 import { ErrorView } from "@/components/error-view";
+import { FavoriteHeart } from "@/components/favorite-heart";
 
 export default function VendorScreen() {
   const insets = useSafeAreaInsets();
@@ -36,7 +37,7 @@ export default function VendorScreen() {
         <ActivityIndicator />
       </View>
     );
-    
+
   if (error) return <ErrorView message={error} onRetry={refetch} />;
 
   if (!vendor)
@@ -127,14 +128,12 @@ export default function VendorScreen() {
         <Ionicons name="chevron-back" size={21} color={Palette.charcoal} />
       </Pressable>
 
-      <Pressable
+      <FavoriteHeart
+        vendorId={vendor.id}
+        vendorName={vendor.name}
+        size={21}
         style={[styles.heroBtn, styles.heroBtnFav, { top: insets.top + 14 }]}
-        hitSlop={8}
-        accessibilityRole="button"
-        accessibilityLabel={"Sačuvaj " + vendor.name + " u omiljene"}
-      >
-        <Ionicons name="heart-outline" size={21} color={Palette.deepGold} />
-      </Pressable>
+      />
     </View>
   );
 }
