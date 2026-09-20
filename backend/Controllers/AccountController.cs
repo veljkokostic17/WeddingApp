@@ -111,5 +111,36 @@ namespace backend.Controllers
 
         }
 
+        [Authorize]
+        [HttpPut("me")]
+        public async Task<IActionResult> UpdateMe([FromBody] UpdateProfileDto updateProfileDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Unauthorized();
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return Unauthorized();
+
+            user.YourName = updateProfileDto.YourName!;
+            user.YourPartnerName = updateProfileDto.YourPartnerName!;
+            user.WeddingDate = updateProfileDto.WeddingDate;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok(new CurrentUserDto
+            {
+                Email = user.Email!,
+                YourName = user.YourName,
+                YourPartnerName = user.YourPartnerName,
+                WeddingDate = user.WeddingDate
+            });
+        }
+
     }
 }
