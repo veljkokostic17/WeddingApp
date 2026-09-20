@@ -19,10 +19,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { VendorCalendar } from "@/components/vendor-calendar";
 import { ErrorView } from "@/components/error-view";
 import { FavoriteHeart } from "@/components/favorite-heart";
+import { VendorGallery } from "@/components/vendor-gallery";
+import { VendorOfferings } from "@/components/vendor-offerings";
+import { PhotoLightbox } from "@/components/photo-lightbox";
+import { useState } from "react";
 
 export default function VendorScreen() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const [openAt, setOpenAt] = useState<number | null>(null);
 
   const {
     data: vendor,
@@ -52,11 +57,17 @@ export default function VendorScreen() {
       <ScrollView>
         <View style={styles.hero}>
           {vendor.photos.length > 0 ? (
-            <Image
-              source={{ uri: vendor.photos[0].imageUrl }}
-              style={styles.heroImage}
-              contentFit="cover"
-            />
+            <Pressable
+              onPress={() => setOpenAt(0)}
+              accessibilityRole="imagebutton"
+              accessibilityLabel="Otvori fotografiju 1"
+            >
+              <Image
+                source={{ uri: vendor.photos[0].imageUrl }}
+                style={styles.heroImage}
+                contentFit="cover"
+              />
+            </Pressable>
           ) : (
             <LinearGradient
               colors={["#D9BFAE", Palette.blush, Palette.creamDeep]}
@@ -66,8 +77,23 @@ export default function VendorScreen() {
         </View>
 
         <View style={styles.body}>
+          <View style={styles.chip}>
+            <Text style={Type.sectionLabel}>{vendor.categoryName}</Text>
+          </View>
+
           <Text style={Type.h1}>{vendor.name}</Text>
           <View style={styles.rule} />
+
+          {vendor.address != null && (
+            <View style={styles.metaRow}>
+              <Ionicons
+                name="location-outline"
+                size={15}
+                color={Palette.charcoalSoft}
+              />
+              <Text style={Type.meta}>{vendor.address}</Text>
+            </View>
+          )}
 
           {vendor.capacity != null && vendor.capacity > 0 && (
             <View style={styles.metaRow}>
@@ -82,9 +108,25 @@ export default function VendorScreen() {
 
           <Text style={[Type.body, styles.desc]}>{vendor.description}</Text>
 
+          <VendorOfferings offerings={vendor.offerings} />
+
+          <VendorGallery
+            photos={vendor.photos.slice(1)}
+            onOpen={(i) => setOpenAt(i + 1)}
+          />
+
           {vendor.capacity != null && vendor.capacity > 0 && (
             <VendorCalendar unavailableDates={vendor.unavailableDates} />
           )}
+
+          <View style={styles.note}>
+            <Text style={[Type.metaSmall, styles.noteText]}>
+              Za informacije o cenama i terminima
+            </Text>
+            <Text style={[Type.accent, styles.noteText]}>
+              kontaktirajte direktno vendora
+            </Text>
+          </View>
 
           <View style={styles.contactRow}>
             <Pressable
@@ -134,6 +176,12 @@ export default function VendorScreen() {
         size={21}
         style={[styles.heroBtn, styles.heroBtnFav, { top: insets.top + 14 }]}
       />
+
+      <PhotoLightbox
+        photos={vendor.photos}
+        openAt={openAt}
+        onClose={() => setOpenAt(null)}
+      />
     </View>
   );
 }
@@ -152,9 +200,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    marginBottom: 14,
+    marginBottom: 7,
   },
-  desc: { marginBottom: 18 },
+  desc: { marginTop: 7, marginBottom: 18 },
 
   contactRow: { flexDirection: "row", gap: 9, marginTop: 4, marginBottom: 22 },
   btn: {
@@ -173,6 +221,27 @@ const styles = StyleSheet.create({
 
   hero: { height: 230, backgroundColor: Palette.creamDeep, overflow: "hidden" },
   heroImage: { width: "100%", height: "100%" },
+
+  // Category eyebrow, boxed — the mockup's pill above the vendor name.
+  chip: {
+    alignSelf: "flex-start",
+    backgroundColor: Palette.creamDeep,
+    borderRadius: 6,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+    marginBottom: 12,
+  },
+
+  note: {
+    alignItems: "center",
+    backgroundColor: Palette.creamDeep,
+    borderRadius: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 18,
+  },
+  noteText: { textAlign: "center" },
+
   heroBtn: {
     position: "absolute",
     width: 40,

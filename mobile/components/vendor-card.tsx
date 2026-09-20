@@ -1,6 +1,7 @@
 import { Palette, tileGradients } from "@/constants/paper-theme";
 import { Type } from "@/constants/typography";
 import { VendorListItem } from "@/types/vendor";
+import { Ionicons } from "@expo/vector-icons";
 import { FavoriteHeart } from "./favorite-heart";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -66,11 +67,19 @@ export function VendorCard({
         </View>
 
         <View style={styles.metaRow}>
+          <Ionicons
+            name="location-outline"
+            size={14}
+            color={Palette.charcoalSoft}
+          />
           <Text style={[Type.meta, styles.vAddr]} numberOfLines={1}>
             {vendorListItem.address}
           </Text>
-          {vendorListItem.capacity != null && vendorListItem.capacity > 0 && (
-            <Text style={Type.accent}>Do {vendorListItem.capacity} gostiju</Text>
+
+          {/* Favorites swaps this slot for the chosen control — both are
+              right-aligned gold, so only one ever occupies the row. */}
+          {onToggleChosen == null && (
+            <Text style={Type.accent}>Pogledaj profil →</Text>
           )}
 
           {onToggleChosen != null && (
@@ -99,7 +108,7 @@ export function VendorCard({
 const styles = StyleSheet.create({
   card: { paddingVertical: 12 },
   photo: {
-    height: 125,
+    height: 185,
     borderRadius: 14,
     overflow: "hidden",
     justifyContent: "flex-end",
@@ -127,8 +136,9 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "baseline",
-    gap: 8,
+    // center, not baseline — an Ionicon has no text baseline to align to.
+    alignItems: "center",
+    gap: 6,
   },
   vAddr: { flex: 1 },
   chooseInactive: { color: Palette.charcoalSoft },
