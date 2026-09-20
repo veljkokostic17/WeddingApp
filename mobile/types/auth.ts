@@ -17,6 +17,12 @@ export interface NewUser {
   yourName: string;
 }
 
+export interface UpdateProfileRequest {
+  yourName: string;
+  yourPartnerName: string;
+  weddingDate: string;
+}
+
 export interface CurrentUser {
   email: string;
   yourName: string;

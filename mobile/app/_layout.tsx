@@ -52,6 +52,7 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Protected guard={user != null}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="edit-profile" options={{ headerShown: false }} />
         </Stack.Protected>
         <Stack.Protected guard={user == null}>
           <Stack.Screen name="sign-in/login" options={{ headerShown: false }} />

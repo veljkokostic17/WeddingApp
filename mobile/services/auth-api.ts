@@ -1,9 +1,10 @@
-import { apiGet, apiPost } from "@/services/api";
+import { apiGet, apiPost, apiPut } from "@/services/api";
 import {
   LoginRequest,
   RegisterRequest,
   NewUser,
   CurrentUser,
+  UpdateProfileRequest,
 } from "@/types/auth";
 
 export function login(body: LoginRequest) {
@@ -16,4 +17,8 @@ export function register(body: RegisterRequest) {
 
 export function getCurrentUser() {
   return apiGet<CurrentUser>("/account/me");
+}
+
+export function updateProfile(body: UpdateProfileRequest) {
+  return apiPut<CurrentUser>("/account/me", body);
 }

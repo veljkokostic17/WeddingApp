@@ -10,21 +10,7 @@ import { Palette } from "@/constants/paper-theme";
 import { Type } from "@/constants/typography";
 import { router } from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
-
-// Match backends DateOnly
-
-function formatDateForApi(d: Date) {
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function formatDateForDisplay(d: Date) {
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  return `${day}.${month}.${d.getFullYear()}.`;
-}
+import { formatDateForApi, formatDateForDisplay } from "@/constants/dates";
 
 const identityMessages: Record<string, string> = {
   DuplicateUserName: "Nalog sa ovim email-om već postoji.",

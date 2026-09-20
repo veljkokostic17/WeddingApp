@@ -10,16 +10,23 @@ import { setAuthToken, setOnUnauthorized } from "@/services/api";
 import {
   login as loginApi,
   register as registerApi,
+  updateProfile as updateProfileApi,
   getCurrentUser,
 } from "@/services/auth-api";
 import { deleteToken, getToken, saveToken } from "@/services/token-storage";
-import { CurrentUser, LoginRequest, RegisterRequest } from "@/types/auth";
+import {
+  CurrentUser,
+  LoginRequest,
+  RegisterRequest,
+  UpdateProfileRequest,
+} from "@/types/auth";
 
 interface AuthContextValue {
   user: CurrentUser | null;
   bootstrapping: boolean;
   login: (body: LoginRequest) => Promise<void>;
   register: (body: RegisterRequest) => Promise<void>;
+  updateProfile: (body: UpdateProfileRequest) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -43,6 +50,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function register(body: RegisterRequest) {
     const result = await registerApi(body);
     await applyToken(result.token);
+  }
+
+  async function updateProfile(body: UpdateProfileRequest) {
+    setUser(await updateProfileApi(body));
   }
 
   async function logout() {
@@ -80,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, bootstrapping, login, register, logout }}
+      value={{ user, bootstrapping, login, register, updateProfile, logout }}
     >
       {children}
     </AuthContext.Provider>
