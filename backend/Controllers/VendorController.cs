@@ -110,7 +110,8 @@ namespace backend.Controllers
             vendorModel.CategoryId = updateDto.CategoryId;
             vendorModel.IsActive = updateDto.IsActive;   
             vendorModel.Capacity = updateDto.Capacity;
-            vendorModel.TableSize = updateDto.TableSize;   
+            vendorModel.TableSize = updateDto.TableSize;
+            vendorModel.Offerings = updateDto.Offerings;
             
             await _context.SaveChangesAsync();
 
@@ -120,6 +121,52 @@ namespace backend.Controllers
 
             return Ok (created!.ToVendorDto());
         }
+        // Partial update: send only the fields you want changed. PUT replaces
+        // everything, which makes editing one field mean retyping all ten.
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch([FromRoute] int id, [FromBody] PatchVendorDto patchDto)
+        {
+            var vendorModel = await _context.Vendors.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (vendorModel == null)
+            {
+                return NotFound();
+            }
+
+            // Only checked when CategoryId was actually sent — otherwise a
+            // bogus id FK-violates into a raw 500, same as Create/Update.
+            if (patchDto.CategoryId != null)
+            {
+                var categoryExists = await _context.Categories.AnyAsync(c => c.Id == patchDto.CategoryId.Value);
+
+                if (!categoryExists)
+                {
+                    return BadRequest("Category does not exist.");
+                }
+
+                vendorModel.CategoryId = patchDto.CategoryId.Value;
+            }
+
+            if (patchDto.Name != null) vendorModel.Name = patchDto.Name;
+            if (patchDto.Description != null) vendorModel.Description = patchDto.Description;
+            if (patchDto.Address != null) vendorModel.Address = patchDto.Address;
+            if (patchDto.Phone != null) vendorModel.Phone = patchDto.Phone;
+            if (patchDto.Email != null) vendorModel.Email = patchDto.Email;
+            if (patchDto.InstagramUrl != null) vendorModel.InstagramUrl = patchDto.InstagramUrl;
+            if (patchDto.IsActive != null) vendorModel.IsActive = patchDto.IsActive.Value;
+            if (patchDto.Capacity != null) vendorModel.Capacity = patchDto.Capacity.Value;
+            if (patchDto.TableSize != null) vendorModel.TableSize = patchDto.TableSize;
+            if (patchDto.Offerings != null) vendorModel.Offerings = patchDto.Offerings;
+
+            await _context.SaveChangesAsync();
+
+            var updated = await _context.Vendors
+                .WithDetails()
+                .FirstOrDefaultAsync(v => v.Id == vendorModel.Id);
+
+            return Ok(updated!.ToVendorDto());
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete ([FromRoute] int id)
         {

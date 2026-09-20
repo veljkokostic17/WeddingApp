@@ -42,5 +42,8 @@ namespace backend.Dtos.Vendor
 
         [StringLength(50)]
         public string? TableSize {get; set;}
+
+        [StringLength(1000)]
+        public string? Offerings {get; set;}
     }
 }

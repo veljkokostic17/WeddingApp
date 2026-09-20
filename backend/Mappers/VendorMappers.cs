@@ -20,6 +20,7 @@ namespace backend.Mappers
                 InstagramUrl = vendorModel.InstagramUrl,
                 Capacity = vendorModel.Capacity,
                 TableSize = vendorModel.TableSize,
+                Offerings = vendorModel.Offerings,
                 CreatedAt = vendorModel.CreatedAt,
                 Photos = vendorModel.Photos.Select(p => p.ToVendorPhotoDto()).ToList(),
                 UnavailableDates = vendorModel.UnavailableDates.Select(p => p.ToVendorUnavailableDateDto()).ToList()
@@ -50,7 +51,8 @@ namespace backend.Mappers
               CategoryId = vendorDto.CategoryId,
               IsActive = vendorDto.IsActive,
               Capacity = vendorDto.Capacity,
-              TableSize = vendorDto.TableSize
+              TableSize = vendorDto.TableSize,
+              Offerings = vendorDto.Offerings
             };
         }
         public static VendorPhotoDto ToVendorPhotoDto (this VendorPhoto photoModel)

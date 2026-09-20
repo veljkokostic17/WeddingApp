@@ -19,6 +19,11 @@ namespace backend.Models
         public bool IsActive {get; set;}
         public int? Capacity {get; set;}
         public string? TableSize {get; set;}
+        // Newline-delimited bullet list for the "Šta nudimo" section. A loose
+        // column rather than a VendorOffering entity: the lines carry no fields
+        // of their own, line order is display order, and editing is one PATCH
+        // instead of POST-and-DELETE per row.
+        public string? Offerings {get; set;}
         public DateTime CreatedAt {get; set; } = DateTime.UtcNow;
         public List<VendorPhoto> Photos {get; set;} = new();
         public List<VendorUnavailableDate> UnavailableDates {get; set;} = new();
